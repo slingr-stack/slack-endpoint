@@ -14,9 +14,11 @@
         http = require('http'),
         https = require('https'),
         request = require('request'),
-        slackClient = require('@slack/client'),
         deAsync = require('deasync'),
-        fs = require('fs');
+        fs = require('fs'),
+        slackClient = require('@slack/client'),
+        { WebClient } = require('@slack/web-api'),
+        { RTMClient } = require('@slack/rtm-api');
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // Configuration from env vars
@@ -676,17 +678,17 @@
 
     const cacheDataStore = new slackClient.MemoryDataStore();
 
-    const web = new slackClient.WebClient(botApiToken, {
+    const web = new WebClient(botApiToken, {
         // Sets the level of logging we require
         logLevel: 'debug'
     });
 
-    const userWeb = userApiToken ? new slackClient.WebClient(userApiToken, {
+    const userWeb = userApiToken ? new WebClient(userApiToken, {
         // Sets the level of logging we require
         logLevel: 'debug'
     }) : null;
 
-    const rtm = new slackClient.RtmClient(botApiToken, {
+    const rtm = new RTMClient(botApiToken, {
         // Sets the level of logging we require
         logLevel: 'warning',
         // Initialise a data store for our client, this will load additional helper functions for the storing and retrieval of data
