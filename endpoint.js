@@ -678,17 +678,20 @@
 
     const web = new slackClient.WebClient(botApiToken, {
         // Sets the level of logging we require
-        logLevel: 'debug'
+        logLevel: 'debug',
+        maxRequestConcurrency: 16
     });
 
     const userWeb = userApiToken ? new slackClient.WebClient(userApiToken, {
         // Sets the level of logging we require
-        logLevel: 'debug'
+        logLevel: 'debug',
+        maxRequestConcurrency: 16
     }) : null;
 
     const rtm = new slackClient.RtmClient(botApiToken, {
         // Sets the level of logging we require
         logLevel: 'warning',
+        maxRequestConcurrency: 16,
         // Initialise a data store for our client, this will load additional helper functions for the storing and retrieval of data
         dataStore: cacheDataStore
     });
