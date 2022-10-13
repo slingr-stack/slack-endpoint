@@ -15,6 +15,7 @@
         https = require('https'),
         request = require('request'),
         slackClient = require('@slack/client'),
+        { WebClient, ErrorCode } = require('@slack/web-api'),
         deAsync = require('deasync'),
         fs = require('fs');
 
@@ -26,46 +27,46 @@
         _endpoint_name: '',
         _app_name: '',
         _pod_id: '',
-        _environment : '',
+        _environment: '',
         _local_deployment: 'false',
         _debug: 'true',
-        _webservices_port : '10000',
-        _token : '',
-        _profile : 'default',
-        _endpoints_services_api : 'https://endpoints-services/api',
+        _webservices_port: '10000',
+        _token: '',
+        _profile: 'default',
+        _endpoints_services_api: 'https://endpoints-services/api',
         USE_SSL: false,
         SSL_KEY: '',
         SSL_CERT: '',
-        _custom_domain : '',
-        _base_domain : 'localhost:8000',
-        _endpoint_config : {}
+        _custom_domain: '',
+        _base_domain: 'localhost:8000',
+        _endpoint_config: {}
     };
 
     const settings = Object.assign({}, defaults, process.env);
     const {
         // Endpoint constants
-        _endpoint_name:     endpointName,
-        _app_name:          applicationName,
-        _pod_id:            _podId,
-        _environment:       environment,
-        _local_deployment:  _localDeployment,
-        _debug:             _debug,
+        _endpoint_name: endpointName,
+        _app_name: applicationName,
+        _pod_id: _podId,
+        _environment: environment,
+        _local_deployment: _localDeployment,
+        _debug: _debug,
         // HTTP services properties
-        _webservices_port:  webServicesPort,
-        _token:             token,
-        _profile:           profile,
-        _endpoints_services_api:    endpointsServicesApi,
-        USE_SSL:            _useSsl,
-        SSL_KEY:            sslKey,
-        SSL_CERT:           sslCert,
+        _webservices_port: webServicesPort,
+        _token: token,
+        _profile: profile,
+        _endpoints_services_api: endpointsServicesApi,
+        USE_SSL: _useSsl,
+        SSL_KEY: sslKey,
+        SSL_CERT: sslCert,
         // System properties
-        _custom_domain:     domainCustom,
-        _base_domain:       domainBase,
+        _custom_domain: domainCustom,
+        _base_domain: domainBase,
         // Endpoint specific properties
-        _endpoint_config:   _endpoint_config
+        _endpoint_config: _endpoint_config
     } = settings;
 
-    const podId = _podId.length > 5 ? _podId.substring(_podId.length-5): _podId;
+    const podId = _podId.length > 5 ? _podId.substring(_podId.length - 5) : _podId;
     const localDeployment = _localDeployment !== 'false' && !!_localDeployment;
     const debug = _debug !== 'false' && !!_debug;
     const useSsl = !localDeployment || _useSsl;
@@ -76,7 +77,7 @@
         botApiToken: '',
         slashCommandsToken: ''
     };
-    const endpointConfig =  Object.assign({}, endpointDefaults, JSON.parse(_endpoint_config));
+    const endpointConfig = Object.assign({}, endpointDefaults, JSON.parse(_endpoint_config));
     const { userApiToken, botApiToken, slashCommandsToken: verificationToken } = endpointConfig;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,7 +92,7 @@
         'endpoint=' + endpointName + ' ' +
         'env=' + environment + ' ' +
         message;
-    
+
     const logDebug = message => {
         if (message && debug) {
             console.log(formatLog('DEBUG', message));
@@ -121,12 +122,12 @@
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     const maskToken = token => {
-        if(!token){
+        if (!token) {
             return '-';
         }
         return token.length < 10 ? '.'.repeat(token.length) :
             token.length < 20 ? token.substr(0, 2) + '.'.repeat(token.length - 4) + token.substr(token.length - 2) :
-            token.substr(0, 4) + '.'.repeat(token.length - 8) + token.substr(token.length - 4)
+                token.substr(0, 4) + '.'.repeat(token.length - 8) + token.substr(token.length - 4)
     };
 
     const maskedToken = maskToken(token);
@@ -143,14 +144,14 @@
     const webhookUrl = domain + '/endpoints/' + endpointName;
 
     const proto = useSsl ? 'https' : 'http';
-    logInfo('Configured endpoint [' + endpointName + ']: '+
-        proto + ' [0.0.0.0:' + webServicesPort + '], '+
-        'webhook [' + webhookUrl + '], '+
-        'token [' + maskedToken + '], '+
+    logInfo('Configured endpoint [' + endpointName + ']: ' +
+        proto + ' [0.0.0.0:' + webServicesPort + '], ' +
+        'webhook [' + webhookUrl + '], ' +
+        'token [' + maskedToken + '], ' +
         (localDeployment ? ', local deployment' : '')
     );
 
-    logInfo('Configured Endpoint Services - api ['+endpointsServicesApi+']');
+    logInfo('Configured Endpoint Services - api [' + endpointsServicesApi + ']');
 
     const maskedUserApiToken = maskToken(userApiToken);
     const maskedBotApiToken = maskToken(botApiToken);
@@ -162,14 +163,14 @@
             return {
                 __endpoint_exception__: true,
                 message: 'There is an issue on the endpoint',
-                error: !code ? {code: 'general', name: 'General exception'} : code
+                error: !code ? { code: 'general', name: 'General exception' } : code
             }
         } else {
             if (typeof err === 'string') {
                 return {
                     __endpoint_exception__: true,
                     message: err,
-                    error: !code ? {code: 'general', name: 'General exception'} : code
+                    error: !code ? { code: 'general', name: 'General exception' } : code
                 }
             } else if (err.__endpoint_exception__) {
                 return err
@@ -178,14 +179,14 @@
                     __endpoint_exception__: true,
                     message: err.message,
                     additionalInfo: err,
-                    error: !code ? {code: 'general', name: 'General exception'} : code
+                    error: !code ? { code: 'general', name: 'General exception' } : code
                 }
             } else {
                 return {
                     __endpoint_exception__: true,
                     message: 'There is an issue on the endpoint',
                     additionalInfo: err,
-                    error: !code ? {code: 'general', name: 'General exception'} : code
+                    error: !code ? { code: 'general', name: 'General exception' } : code
                 }
             }
         }
@@ -195,13 +196,13 @@
     // node.js related events
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    process.on('exit', code => logInfo('Endpoint stopped - exit code ['+ code+']'));
+    process.on('exit', code => logInfo('Endpoint stopped - exit code [' + code + ']'));
     process.on('SIGINT', () => {
         logInfo('Endpoint stopped');
         process.exit(0)
     });
-    process.on('beforeExit', code => logInfo('Stopping endpoint - exit code ['+ code+']'));
-    process.on('warning', warning => logWarn('Warning ['+util.inspect(warning, { showHidden: true, depth: null })+']'));
+    process.on('beforeExit', code => logInfo('Stopping endpoint - exit code [' + code + ']'));
+    process.on('warning', warning => logWarn('Warning [' + util.inspect(warning, { showHidden: true, depth: null }) + ']'));
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // Endpoints services
@@ -209,10 +210,10 @@
 
     const esExecutePost = (path, body, headers) => {
         headers = headers || {};
-        if(!headers.token){
+        if (!headers.token) {
             headers.token = token;
         }
-        if(!headers.version){
+        if (!headers.version) {
             headers.version = 'v1';
         }
 
@@ -227,7 +228,7 @@
 
             // The below parameters are specific to request-retry
             maxAttempts: 10,   // (default) try 5 times
-            retryDelay: 5000,  // (default) wait for 5s before trying again
+            retryDelay: 30000,  // (default) wait for 5s before trying again
             retryStrategy: requestRetry.RetryStrategies.HTTPOrNetworkError // (default) retry on 5xx or network errors
         };
 
@@ -236,7 +237,7 @@
     };
 
     const esExecuteGetFile = deAsync((path, fileId, cb) => {
-        let filePath = '/tmp/'+fileId+'_'+(Math.floor(Math.random() * 99999));
+        let filePath = '/tmp/' + fileId + '_' + (Math.floor(Math.random() * 99999));
 
         let options = {
             url: endpointsServicesApi + path,
@@ -254,24 +255,24 @@
                 let e;
                 try {
                     e = JSON.parse(err)
-                } catch (ex){
+                } catch (ex) {
                     e = err
                 }
                 cb(e, null);
             })
             .on('response', response => {
-                if(response.statusCode >= 400){
+                if (response.statusCode >= 400) {
                     let errs = fs.createReadStream(filePath);
                     let err = '';
                     errs.on('readable', () => {
                         let chunk = errs.read();
-                        if(chunk) err += chunk
+                        if (chunk) err += chunk
                     });
                     errs.on('end', () => {
                         let e;
                         try {
                             e = JSON.parse(err)
-                        } catch (ex){
+                        } catch (ex) {
                             e = err
                         }
                         cb(e, null);
@@ -286,10 +287,10 @@
 
     const esExecuteSyncPost = deAsync((path, body, headers, cb) => {
         headers = headers || {};
-        if(!headers.token){
+        if (!headers.token) {
             headers.token = token;
         }
-        if(!headers.version){
+        if (!headers.version) {
             headers.version = 'v1';
         }
 
@@ -304,7 +305,7 @@
 
             // The below parameters are specific to request-retry
             maxAttempts: 10,   // (default) try 5 times
-            retryDelay: 5000,  // (default) wait for 5s before trying again
+            retryDelay: 30000,  // (default) wait for 5s before trying again
             retryStrategy: requestRetry.RetryStrategies.HTTPOrNetworkError // (default) retry on 5xx or network errors
         };
 
@@ -313,7 +314,7 @@
                 logInfo('Error when try to send sync request to app [' + error + ']');
                 appLogError('Error when try to send sync request from endpoint to application');
 
-                if(cb){
+                if (cb) {
                     cb(error, null);
                 }
             } else {
@@ -330,7 +331,7 @@
             headers: {
                 token: token,
                 version: 'v1'
-            }, 
+            },
             formData: {
                 file: fs.createReadStream(filePath)
             },
@@ -344,7 +345,7 @@
                 logInfo('Error when try to upload a file to app [' + error + ']');
                 appLogError('Error when try to upload a file from endpoint to application');
 
-                if(cb){
+                if (cb) {
                     cb(error, null);
                 }
             } else {
@@ -398,12 +399,12 @@
             event: eventName,
             data: data
         };
-        if(!!fromFunction){
+        if (!!fromFunction) {
             eventBody.fromFunction = fromFunction;
         }
 
         let response = null;
-        if(!!sync){
+        if (!!sync) {
             let headers = {
                 sync: true
             };
@@ -415,13 +416,13 @@
                         let json = JSON.parse('' + response);
                         response = json;
                     } catch (e) {
-                        logDebug('Error: ' + JSON.stringify(e) + ', response: '+response);
+                        logDebug('Error: ' + JSON.stringify(e) + ', response: ' + response);
                     }
                     logDebug('[SYNC EVENT][' + eventName + '][type: ' + (type || response.type || '-') + '] >> [SENT]')
                 } else {
                     logDebug('[SYNC EVENT][' + eventName + '][type: ' + (type || data.type || '-') + '] >> [SENT] [EMPTY RESPONSE]')
                 }
-            } catch (e){
+            } catch (e) {
                 logDebug('[SYNC EVENT][' + eventName + '][type: ' + (type || '-') + '] >> [NO SENT]');
                 logInfo('Error when try to send sync event to ES [' + e + ']');
                 throw e;
@@ -435,9 +436,9 @@
                 });
         }
 
-        if(!lastStatistic || moment().subtract(1, 'hour').isAfter(lastStatistic)) {
+        if (!lastStatistic || moment().subtract(1, 'hour').isAfter(lastStatistic)) {
             lastStatistic = moment();
-            logInfo(">>> mem usage: " + util.inspect(process.memoryUsage(), {showHidden: true, depth: null}));
+            logInfo(">>> mem usage: " + util.inspect(process.memoryUsage(), { showHidden: true, depth: null }));
         }
 
         return response;
@@ -448,7 +449,7 @@
         if (!fileId) {
             throw 'Invalid file id';
         }
-        return esExecuteGetFile('/endpoints/files/'+fileId, fileId);
+        return esExecuteGetFile('/endpoints/files/' + fileId, fileId);
     };
 
     // upload a file (POST /endpoints/files)
@@ -457,7 +458,7 @@
             throw 'Empty file';
         }
         let response = esExecutePostFile('/endpoints/files', filePath);
-        if(response && !response.fileId) {
+        if (response && !response.fileId) {
             try {
                 let json = JSON.parse('' + response);
                 response = json;
@@ -521,7 +522,7 @@
             newKey = newKey !== undefined ? newKey : (referenceKey + '_info');
             if (!message[newKey] && Array.isArray(message[key])) {
                 let users = [];
-                if(message[key].length > 0) {
+                if (message[key].length > 0) {
                     if (typeof message[key][0] !== 'string') {
                         return false;
                     }
@@ -552,8 +553,8 @@
                         } else {
                             message[newKey] = '@' + channel.user
                         }
-                    } else if(channel.is_channel) {
-                        message[newKey] = '#'+channel.name
+                    } else if (channel.is_channel) {
+                        message[newKey] = '#' + channel.name
                     } else {
                         message[newKey] = channel.name
                     }
@@ -569,7 +570,7 @@
             newKey = newKey !== undefined ? newKey : (referenceKey + '_info');
             if (!message[newKey] && Array.isArray(message[key])) {
                 let channels = [];
-                if(message[key].length > 0) {
+                if (message[key].length > 0) {
                     if (typeof message[key][0] !== 'string') {
                         return false;
                     }
@@ -617,7 +618,7 @@
                         //going on step down in the object tree!!
                         doConversionsOnMessage(message[i])
                     }
-                } else if (typeof(message[i]) == "object") {
+                } else if (typeof (message[i]) == "object") {
                     //going on step down in the object tree!!
                     doConversionsOnMessage(message[i])
                 } else {
@@ -676,22 +677,23 @@
 
     const cacheDataStore = new slackClient.MemoryDataStore();
 
-    const web = new slackClient.WebClient(botApiToken, {
+    const web = new WebClient(botApiToken, {
         // Sets the level of logging we require
         logLevel: 'debug',
-        maxRequestConcurrency: 16
+        rejectRateLimitedCalls: true,
+        maxRequestConcurrency: 10000
     });
 
-    const userWeb = userApiToken ? new slackClient.WebClient(userApiToken, {
+    const userWeb = userApiToken ? new WebClient(userApiToken, {
         // Sets the level of logging we require
         logLevel: 'debug',
-        maxRequestConcurrency: 16
+        rejectRateLimitedCalls: true,
+        maxRequestConcurrency: 10000
     }) : null;
 
     const rtm = new slackClient.RtmClient(botApiToken, {
         // Sets the level of logging we require
         logLevel: 'warning',
-        maxRequestConcurrency: 16,
         // Initialise a data store for our client, this will load additional helper functions for the storing and retrieval of data
         dataStore: cacheDataStore
     });
@@ -701,57 +703,49 @@
     /////////////////////
 
     // generic call to the web api
-    const _slackRequest = (endpoint, data, cb) => {
+    const _slackRequest = async (endpoint, data, cb) => {
+        // First API call
         data = data || {};
         if (userWeb && !!data.send_as_user) {
-            userWeb._makeAPICall(endpoint, data, null, (err, msg) => {
-                if(!!err){
+            try {
+                const response = await userWeb.apiCall(endpoint, data);
+                cb(null, response.message);
+            } catch (error) {
+                logError('*** ERROR: ' + JSON.stringify(error));
+                if (error.code === ErrorCode.RateLimitedError) {
+                    setTimeout(async () => {
+                        const response = await userWeb.apiCall(endpoint, data);
+                        cb(null, response.message);;
+                    }, 2000);
+                } else {
                     cb({
                         __endpoint_exception__: true,
-                        message: 'Error returned by the Slack API'+(!!err ? ': '+(!!err.message ? err.message : err):''),
-                        additionalInfo: msg,
-                        error: {code: 'apiException', name: 'API exception'}
-                    }, msg);
-                } else {
-                    if(!msg.ok){
-                        cb({
-                            __endpoint_exception__: true,
-                            message: 'Error returned by the Slack API: '+msg.error,
-                            additionalInfo: msg,
-                            error: {code: 'apiException', name: 'API exception'}
-                        }, msg);
-                    } else {
-                        cb(null, msg)
-                    }
+                        message: 'Error returned by the Slack API: ' + error,
+                        additionalInfo: error,
+                        error: { code: 'apiException', name: 'API exception' }
+                    }, error);
                 }
-            })
+            }
         } else {
-            web._makeAPICall(endpoint, data, null, (err, msg) => {
-                let newError = null;
-                if(!!err){
-                    newError = {
+            try {
+                const response = await web.apiCall(endpoint, data);
+                cb(null, response.message);
+            } catch (error) {
+                logError('*** ERROR: ' + JSON.stringify(error));
+                if (error.code === ErrorCode.RateLimitedError) {
+                    setTimeout(async () => {
+                        const response = await web.apiCall(endpoint, data);
+                        cb(null, response.message);;
+                    }, 2000);
+                } else {
+                    cb({
                         __endpoint_exception__: true,
-                        message: 'Error returned by the Slack API' + (!!err ? ': ' + (!!err.message ? err.message : err) : ''),
-                        additionalInfo: !!msg ? msg : {},
-                        error: {code: 'apiException', name: 'API exception'}
-                    }
-                } else {
-                    if(!msg.ok){
-                        newError = {
-                            __endpoint_exception__: true,
-                            message: 'Error returned by the Slack API: '+msg.error,
-                            additionalInfo: !!msg ? msg : {},
-                            error: {code: 'apiException', name: 'API exception'}
-                        };
-                    }
+                        message: 'Error returned by the Slack API: ' + error,
+                        additionalInfo: error,
+                        error: { code: 'apiException', name: 'API exception' }
+                    }, error);
                 }
-
-                if(!!newError){
-                    cb(newError, null)
-                } else {
-                    cb(null, msg)
-                }
-            })
+            }
         }
     };
     const _syncSlackRequest = deAsync(_slackRequest);
@@ -770,16 +764,16 @@
     const _syncSlackRequestUploadFile = deAsync(_slackRequestUploadFile);
 
     const downloadFileFromApplication = (functionName, fileId) => {
-        logDebug('[FUNCTION]['+functionName+'] Downloading file from application [' + fileId + ']');
+        logDebug('[FUNCTION][' + functionName + '] Downloading file from application [' + fileId + ']');
         let response = null;
         try {
             response = getFileFromApp(fileId);
-            logDebug('[FUNCTION]['+functionName+'][download file][' + fileId + ']  >> [' + (!!response ? '' : 'NO ') + 'DOWNLOADED]');
-        } catch(error) {
-            logDebug('[FUNCTION]['+functionName+'][download file][' + fileId + '] >> [NO DOWNLOADED]');
+            logDebug('[FUNCTION][' + functionName + '][download file][' + fileId + ']  >> [' + (!!response ? '' : 'NO ') + 'DOWNLOADED]');
+        } catch (error) {
+            logDebug('[FUNCTION][' + functionName + '][download file][' + fileId + '] >> [NO DOWNLOADED]');
             logInfo('Error when try to read file from app runtime [' + JSON.stringify(error) + ']');
 
-            appLogError('Error when endpoint try to read file [' + fileId + ']', {error: error});
+            appLogError('Error when endpoint try to read file [' + fileId + ']', { error: error });
             throw error;
         }
         return response;
@@ -794,10 +788,10 @@
 
         let params = data.params || data.body || {};
         let response = null;
-        if(path === 'files.upload' && !!params.file_id){
+        if (path === 'files.upload' && !!params.file_id) {
             // download the file from application before to send to slack
             let file = downloadFileFromApplication(path, params.file_id);
-            if(file) {
+            if (file) {
                 params.file_id = null;
                 response = _syncSlackRequestUploadFile(params, file);
             }
@@ -819,9 +813,9 @@
         let filename = null;
         let error = false;
 
-        if(fileId){
-            let file = genericSlackRequest({path: 'files.info', params:{file: fileId}});
-            if(!file.ok){
+        if (fileId) {
+            let file = genericSlackRequest({ path: 'files.info', params: { file: fileId } });
+            if (!file.ok) {
                 error = file.error ? file.error : 'Error when try to retry file information';
             } else {
                 if (file.file && fileId == file.file.id) {
@@ -841,36 +835,36 @@
         let options = {
             url: url,
             headers: {
-              'Authorization': 'Bearer '+botApiToken
+                'Authorization': 'Bearer ' + botApiToken
             }
         };
 
-        let filePath = '/tmp/'+(Math.floor(Math.random() * 99999))+'_'+(filename?filename:'file');
+        let filePath = '/tmp/' + (Math.floor(Math.random() * 99999)) + '_' + (filename ? filename : 'file');
         request(options)
             .on('error', err => {
-                appLogError('Error when download file '+(filename?'['+filename+'] ':'')+'['+url+']');
-                logWarn('Error when download file: '+JSON.stringify(err));
-                if(cb){
+                appLogError('Error when download file ' + (filename ? '[' + filename + '] ' : '') + '[' + url + ']');
+                logWarn('Error when download file: ' + JSON.stringify(err));
+                if (cb) {
                     cb(err, null);
                 }
             })
             .on('response', response => {
-                if(response.statusCode >= 400){
+                if (response.statusCode >= 400) {
                     let errs = fs.createReadStream(filePath);
                     let err = '';
                     errs.on('readable', () => {
                         let chunk = errs.read();
-                        if(chunk) err += chunk
+                        if (chunk) err += chunk
                     });
                     errs.on('end', () => {
                         let e;
                         try {
                             e = JSON.parse(err)
-                        } catch (ex){
+                        } catch (ex) {
                             e = err
                         }
-                        appLogError('Error when try to download file ['+url+']: '+JSON.stringify(err));
-                        if(cb) {
+                        appLogError('Error when try to download file [' + url + ']: ' + JSON.stringify(err));
+                        if (cb) {
                             cb(e, null);
                         }
                     });
@@ -916,13 +910,13 @@
         }
         let fileId = data.file_id;
         let sync = !!data.sync;
-        logDebug('[FUNCTION] Downloading file [' + fileId + ']'+(sync?' SYNC':''));
+        logDebug('[FUNCTION] Downloading file [' + fileId + ']' + (sync ? ' SYNC' : ''));
 
-        let response = {body: 'ok'};
-        if(!!data.fullResponse){
+        let response = { body: 'ok' };
+        if (!!data.fullResponse) {
             response.fullResponse = true;
         }
-        if(sync){
+        if (sync) {
             // sync download
             response = syncDownloadFile(fileId, null);
         } else {
@@ -943,7 +937,7 @@
         };
 
         requestRetry.post(options)
-            .then(response => logInfo("Executed slack request to URL ["+data.responseUrl+"]"))
+            .then(response => logInfo("Executed slack request to URL [" + data.responseUrl + "]"))
             .catch(reason => logWarn("Exception when executes slack command: " + util.inspect(reason, { showHidden: true, depth: null })))
     };
 
@@ -953,17 +947,17 @@
         }
         let key = data.key;
         let value = null;
-        if(functionName == '__convertTeam'){
+        if (functionName == '__convertTeam') {
             let team = cacheDataStore.getTeamById(key);
             if (team) {
                 value = team.name;
             }
-        } else if(functionName == '__convertUser'){
+        } else if (functionName == '__convertUser') {
             let user = cacheDataStore.getUserById(key);
             if (user) {
                 value = user.name;
             }
-        } else if(functionName == '__convertChannel'){
+        } else if (functionName == '__convertChannel') {
             let channel = cacheDataStore.getChannelGroupOrDMById(key);
             if (channel) {
                 if (channel.is_im) {
@@ -973,27 +967,27 @@
                     } else {
                         value = '@' + channel.user
                     }
-                } else if(channel.is_channel) {
-                    value = '#'+channel.name
+                } else if (channel.is_channel) {
+                    value = '#' + channel.name
                 } else {
                     value = channel.name
                 }
             }
-        } else if(functionName == '__convertTimestamp'){
+        } else if (functionName == '__convertTimestamp') {
             let ts = moment(key, "X").format('X');
             if (ts) {
-                value = parseInt(ts)*1000;
+                value = parseInt(ts) * 1000;
             }
         } else {
-            throw 'Invalid conversion: '+functionName
+            throw 'Invalid conversion: ' + functionName
         }
-        return {key: key, value: value}
+        return { key: key, value: value }
     };
 
     const conversionObjectRequest = (functionName, data) => {
         data = data || {};
         let response = null;
-        if(functionName == '__convertEvent'){
+        if (functionName == '__convertEvent') {
             response = doConversionsOnMessage(data);
         }
         return response;
@@ -1039,7 +1033,7 @@
         logInfo('Slack RTM connection open');
 
         // send 'hello' to app
-        processReceivedEvent({type: "hello"})
+        processReceivedEvent({ type: "hello" })
     });
 
     rtm.on(slackClient.CLIENT_EVENTS.RTM.DISCONNECT, () =>
@@ -1049,7 +1043,7 @@
     // subscribe to RTM events
     for (let eventName in slackClient.RTM_EVENTS) {
         if (eventName != 'USER_TYPING' && eventName != 'RECONNECT_URL') {
-            if(slackClient.RTM_EVENTS.hasOwnProperty(eventName)) {
+            if (slackClient.RTM_EVENTS.hasOwnProperty(eventName)) {
                 rtm.on(slackClient.RTM_EVENTS[eventName], processReceivedEvent)
             }
         }
@@ -1077,12 +1071,12 @@
         if (body.token && verificationToken === body.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
             validToken = true
         }
         if (validToken) {
-            if(body.type === 'url_verification'){
+            if (body.type === 'url_verification') {
                 res.send({ challenge: body.challenge });
             } else {
                 processReceivedHttpEvent(body);
@@ -1102,7 +1096,7 @@
         if (body.token && verificationToken === body.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
             validToken = true
         }
@@ -1119,16 +1113,16 @@
     webhookRouter.post('/interactiveMessages', (req, res) => {
         // check payload
         let payload = {};
-        if(req.body && req.body.payload) {
-            payload = JSON.parse(''+req.body.payload);
+        if (req.body && req.body.payload) {
+            payload = JSON.parse('' + req.body.payload);
         }
-        if(Object.keys(payload).length !== 0){
+        if (Object.keys(payload).length !== 0) {
             // check token
             let validToken = false;
             if (payload.token && verificationToken === payload.token) {
                 validToken = true
             }
-            if(!validToken && localDeployment){
+            if (!validToken && localDeployment) {
                 // if the endpoint is running in local environment, pass token validation
                 validToken = true
             }
@@ -1149,19 +1143,19 @@
     webhookRouter.post('/optionsLoad', (req, res) => {
         // check payload
         let payload = req.body;
-        if(req.body && req.body.payload) {
-            payload = JSON.parse(''+req.body.payload);
+        if (req.body && req.body.payload) {
+            payload = JSON.parse('' + req.body.payload);
         }
         // check token
         let validToken = false;
         if (payload.token && verificationToken === payload.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
             validToken = true
         }
-        if(!validToken){
+        if (!validToken) {
             logWarn("Invalid verification token");
             res.status(401).send('Invalid token');
             return {};
@@ -1174,7 +1168,7 @@
         let options;
         try {
             options = sendEvent(OPTIONS_LOAD, payload, null, null, true);
-        } catch (ex){
+        } catch (ex) {
             appLogError("There was an error loading options: " + JSON.stringify(ex));
             options = [];
         }
@@ -1185,7 +1179,7 @@
     // HTTP service: Endpoint API
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    appLogInfo('Endpoint ['+endpointName+'] is being initialized');
+    appLogInfo('Endpoint [' + endpointName + '] is being initialized');
 
     const apiRouter = express.Router();
 
@@ -1197,16 +1191,16 @@
         if (req.headers && req.headers.token && token === req.headers.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
-            if(!firstLocalDeploymentWarning) {
+            if (!firstLocalDeploymentWarning) {
                 firstLocalDeploymentWarning = true;
                 logWarn("Invalid or empty token on request. Ignored exceptions of this kind because the endpoint is running in local deployment.");
             }
             validToken = true
         }
         if (validToken) {
-            res.send({started: true});
+            res.send({ started: true });
         } else {
             logInfo("Invalid token when try to check health");
             res.status(401).send('Invalid token')
@@ -1219,9 +1213,9 @@
         if (req.headers && req.headers.token && token === req.headers.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
-            if(!firstLocalDeploymentWarning) {
+            if (!firstLocalDeploymentWarning) {
                 firstLocalDeploymentWarning = true;
                 logWarn("Invalid or empty token on request. Ignored exceptions of this kind because the endpoint is running in local deployment.");
             }
@@ -1243,9 +1237,9 @@
         if (req.headers && req.headers.token && token === req.headers.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
-            if(!firstLocalDeploymentWarning) {
+            if (!firstLocalDeploymentWarning) {
                 firstLocalDeploymentWarning = true;
                 logWarn("Invalid or empty token on request. Ignored exceptions of this kind because the endpoint is running in local deployment.");
             }
@@ -1259,7 +1253,7 @@
                 let functionName = body.function;
 
                 if (!functionName) {
-                    response = convertException('Empty function name', {code: 'argumentException', name: 'Argument invalid'});
+                    response = convertException('Empty function name', { code: 'argumentException', name: 'Argument invalid' });
                     responseCode = 404;
                 } else {
                     let params = body.params || body.body || {};
@@ -1268,7 +1262,7 @@
                         // get response
                         response = genericSlackRequest(params)
                     } else {
-                        if(genericDownloadFunctions.indexOf(functionName) >= 0) {
+                        if (genericDownloadFunctions.indexOf(functionName) >= 0) {
                             // download response
                             response = genericDownloadRequest(params, body.id)
                         } else {
@@ -1293,7 +1287,7 @@
                                             response = conversionObjectRequest(functionName, params);
                                         } else {
                                             // invalid function
-                                            response = convertException('Function [' + functionName + '] is not defined for the endpoint', {code: 'argumentException', name: 'Argument invalid'});
+                                            response = convertException('Function [' + functionName + '] is not defined for the endpoint', { code: 'argumentException', name: 'Argument invalid' });
                                             responseCode = 404;
                                         }
                                     }
@@ -1303,15 +1297,15 @@
                     }
                 }
             } catch (err) {
-                if(!!err && !!err.message) {
-                    if(!!err.__endpoint_exception__) {
+                if (!!err && !!err.message) {
+                    if (!!err.__endpoint_exception__) {
                         response = convertException(err)
                     } else {
                         response = convertException(err.message)
                     }
                 } else {
-                    err = util.inspect(err, {showHidden: true, depth: null});
-                    if(!!err && err.startsWith("'") && err.endsWith("'")){
+                    err = util.inspect(err, { showHidden: true, depth: null });
+                    if (!!err && err.startsWith("'") && err.endsWith("'")) {
                         err = err.substring(1, err.length - 1);
                     }
                     response = convertException(err);
@@ -1340,9 +1334,9 @@
         if (req.headers && req.headers.token && token === req.headers.token) {
             validToken = true
         }
-        if(!validToken && localDeployment){
+        if (!validToken && localDeployment) {
             // if the endpoint is running in local environment, pass token validation
-            if(!firstLocalDeploymentWarning) {
+            if (!firstLocalDeploymentWarning) {
                 firstLocalDeploymentWarning = true;
                 logWarn("Invalid or empty token on request. Ignored exceptions of this kind because the endpoint is running in local deployment.");
             }
@@ -1383,51 +1377,51 @@
                         events: []
                     };
 
-                    if(!!json.configurationHelpUrl){
+                    if (!!json.configurationHelpUrl) {
                         response.configurationHelpUrl = json.configurationHelpUrl;
                     }
-                    if(!!json.functions){
+                    if (!!json.functions) {
                         response.functions = json.functions;
                     }
-                    if(!!json.events){
+                    if (!!json.events) {
                         response.events = json.events;
                     }
-                    if(!!json.configuration){
+                    if (!!json.configuration) {
                         response.conf = json.configuration;
                     }
-                    if(!!json.userConfiguration){
+                    if (!!json.userConfiguration) {
                         response.userConf = json.userConfiguration;
                     }
-                    if(!!json.userConfigurationButtons){
+                    if (!!json.userConfigurationButtons) {
                         response.userConfButtons = json.userConfigurationButtons;
                     }
-                    if(!!json.scripts){
+                    if (!!json.scripts) {
                         let scripts = '';
-                        for(let i in json.scripts){
-                            let fileContent = fs.readFileSync('./scripts/'+json.scripts[i], 'utf8');
-                            if(fileContent){
+                        for (let i in json.scripts) {
+                            let fileContent = fs.readFileSync('./scripts/' + json.scripts[i], 'utf8');
+                            if (fileContent) {
                                 try {
                                     scripts += '\n/* */\n';
                                     scripts += fileContent;
                                     scripts += '\n/* */\n';
-                                } catch (err){
-                                    logWarn('JS file ['+json.scripts[i]+'] can not be read: '+convertException(err));
+                                } catch (err) {
+                                    logWarn('JS file [' + json.scripts[i] + '] can not be read: ' + convertException(err));
                                 }
                             }
                         }
                         response.js = scripts;
                     }
-                    if(!!json.listeners){
+                    if (!!json.listeners) {
                         let listeners = '';
-                        for(let i in json.listeners){
-                            let fileContent = fs.readFileSync('./listeners/'+json.listeners[i], 'utf8');
-                            if(fileContent){
+                        for (let i in json.listeners) {
+                            let fileContent = fs.readFileSync('./listeners/' + json.listeners[i], 'utf8');
+                            if (fileContent) {
                                 try {
                                     listeners += '\n/* */\n';
                                     listeners += fileContent;
                                     listeners += '\n/* */\n';
-                                } catch (err){
-                                    logWarn('Listeners file ['+json.listeners[i]+'] can not be read: '+convertException(err));
+                                } catch (err) {
+                                    logWarn('Listeners file [' + json.listeners[i] + '] can not be read: ' + convertException(err));
                                 }
                             }
                         }
@@ -1438,11 +1432,11 @@
                     response = convertException('Empty metadata file')
                 }
             } catch (err) {
-                if(err && err.message) {
+                if (err && err.message) {
                     response = convertException(err.message)
                 } else {
-                    err = util.inspect(err, {showHidden: true, depth: null});
-                    if(err && err.startsWith("'") && err.endsWith("'")){
+                    err = util.inspect(err, { showHidden: true, depth: null });
+                    if (err && err.startsWith("'") && err.endsWith("'")) {
                         err = err.substring(1, err.length - 1);
                     }
                     response = convertException(err)
@@ -1461,7 +1455,7 @@
 
     const webServicesServer = express();
     webServicesServer.use(compression());
-    webServicesServer.use(bodyParser.urlencoded({extended: true})); // configure app to use bodyParser()
+    webServicesServer.use(bodyParser.urlencoded({ extended: true })); // configure app to use bodyParser()
     webServicesServer.use(bodyParser.json()); // this will let us get the data from a POST
     webServicesServer.use('/api', apiRouter); // all of our routes will be prefixed with /api
     webServicesServer.use('/', webhookRouter); // all of our routes will be prefixed with nothing
@@ -1485,8 +1479,8 @@
     // Endpoint Started
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    logInfo(">>> mem init usage: "+util.inspect(process.memoryUsage(), { showHidden: true, depth: null }));
-    appLogInfo('Endpoint ['+endpointName+'] started');
+    logInfo(">>> mem init usage: " + util.inspect(process.memoryUsage(), { showHidden: true, depth: null }));
+    appLogInfo('Endpoint [' + endpointName + '] started');
 
     module.exports = webServicesServer;
 })(require, process, module);

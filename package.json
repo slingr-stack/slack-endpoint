@@ -16,6 +16,7 @@
   "author": "SLINGR",
   "dependencies": {
     "@slack/client": "^3.10.0",
+    "@slack/web-api": "^6.7.2",
     "async": "^2.5.0",
     "body-parser": "^1.17.2",
     "compression": "^1.7.0",
@@ -33,7 +34,8 @@
     "chai": "^4.1.0",
     "chai-http": "^3.0.0",
     "mocha": "^3.4.2",
-    "nock": "^9.0.14"
+    "nock": "^9.0.14",
+    "nodemon": "^2.0.20"
   },
   "repository": "https://github.com/slingr-stack/platform/tree/develop/integrations/endpoints/slack",
   "license": "UNLICENSED"
