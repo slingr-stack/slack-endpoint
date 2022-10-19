@@ -66,16 +66,6 @@
     ],
     "functions": [
         {
-            "label": "GET",
-            "name": "get",
-            "description": "Sends a GET request"
-        },
-        {
-            "label": "POST",
-            "name": "post",
-            "description": "Sends a POST request"
-        },
-        {
             "label": "Respond to slash command",
             "name": "_respondToSlashCommand",
             "description": "Responds to a slash command",
