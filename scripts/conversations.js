@@ -593,7 +593,11 @@ var buildConvoId = function(event) {
     if (event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') {
         return convoPrefix+event.data.user+'_'+event.data.channel;
     } else if (event.endpointEvent == 'interactiveMessage') {
-        return convoPrefix+event.data.user.id+'_'+event.data.channel.id;
+        if (event.data.payload.channel) {
+        return convoPrefix+event.data.payload.user.id+'_'+event.data.payload.channel.id;
+        } else {
+            return convoPrefix+event.data.payload.user.id;
+        }
     } else {
         sys.exceptions.throwException('badRequest', 'Invalid event');
     }
@@ -605,7 +609,7 @@ var buildConvoIdWithoutEvent = function(userId, channelId) {
 
 var getBotUserId = function() {
     if (!botUserId) {
-        var res = bot.get({path: '/auth.test'});
+        var res = bot.post({path: 'auth.test'});
         botUserId = res.user_id;
     }
     return botUserId;

@@ -1,3 +1,18 @@
+// TODO:
+// - Events: eventArrived (RTM Client) - In Progress
+// - Functions: __downloadFile (callback: fileDownloaded) - Pending
+
+// - Functions:
+// - get -> genericSlackRequest() - Done
+// - post -> genericSlackRequest() - Done
+// - _respondToSlashCommand, - Done
+// - _respondToInteractiveMessage - Done
+// - __convertTeam - Done
+// - __convertUser - Done
+// - __convertChannel - Done
+// - __convertTimestamp - Done
+// - __convertEvent - Deprecated
+
 const endpoint = require('slingr-endpoints'),
     { WebClient } = require('@slack/web-api'),
     { createReadStream } = require('fs'),
@@ -5,113 +20,70 @@ const endpoint = require('slingr-endpoints'),
 
 let web;
 endpoint.hooks.onEndpointStart = async () => {
-    console.log('Slack Endpoint Started');
     web = new WebClient(endpoint.endpointConfig.botApiToken);
 }
 
-// TODO:
-// - Events: httpEventArrived
-// - Functions: __downloadFile (callback: fileDownloaded)
-// - Functions:
-// - get -> genericSlackRequest() - Done
-// - post -> genericSlackRequest() - Done
-// - _respondToSlashCommand, - In progress
-// - _respondToInteractiveMessage
-// - __convertTeam - Done
-// - __convertUser - Done
-// - __convertChannel - Done
-// - __convertTimestamp - Done
-// - __convertEvent - Deprecated
+// genericSlackRequest
+endpoint.functions.__request = async ({ params }) => {
+    let opts = params.params;
+    if (params.path === 'files.upload') {
+        uploadFile(params.file_id)
+        return { uploadFile: true };
+    }
+    let fn = params.path.split('.').reduce((o, i) => o[i], web)
+    let res = await fn(opts);
+    return res;
+};
 
+// function used for slashCommands and interactiveMessages features
 const responseUrlRequest = async data => {
     if (!data || !data.responseUrl) {
         throw 'Empty response url'
     }
-    try {
-        var response = await endpoint.httpModule.post(data.responseUrl, data.message);
-        console.log('*** RESPONSE: ' + JSON.stringify(response));
-        endpoint.appLogger.info("Executed slack request to URL [" + data.responseUrl + "]");
-        return response;
-    } catch (error) {
-        endpoint.appLogger.error("Exception when executes slack command: ", error);
-    }
-};
-
-// genericSlackRequest
-endpoint.functions.__request = async ({ params }) => {
-    try {
-        let opts = params.params;
-        if (params.path === 'files.upload') {
-            uploadFile(params.file_id)
-            return { uploadFile: true };
-        }
-        let fn = params.path.split('.').reduce((o, i) => o[i], web)
-        let res = await fn(opts);
-        return res;
-    } catch (error) {
-        endpoint.appLogger.error(error);
-    }
+    let response = await endpoint.httpModule.post(data.responseUrl, data.message || {});
+    endpoint.appLogger.info("Executed slack request to URL [" + data.responseUrl + "]");
+    return response.data
 };
 
 endpoint.functions._respondToSlashCommand = async ({ params }) => {
-    // slash commands function
-    endpoint.appLogger.debug('[FUNCTION][slash command] executing slash command response');
-    return responseUrlRequest(params);
+    return await responseUrlRequest(params);
+};
+
+endpoint.functions._respondToInteractiveMessage = async ({ params }) => {
+    return await responseUrlRequest(params);
 };
 
 endpoint.functions.__convertTeam = async ({ params }) => {
-    try {
-        let response = await web.team.info({ team: params.key });
-        if (response.ok) {
-            return { key: params.key, value: response.team.name };
-        }
-    } catch (error) {
-        endpoint.appLogger.error(error);
-    }
+    let response = await web.team.info({ team: params.key });
+    return { key: params.key, value: response.team.name };
 };
 
 endpoint.functions.__convertUser = async ({ params }) => {
-    try {
-        let response = await web.users.info({ user: params.key });
-        if (response.ok) {
-            return { key: params.key, value: response.user.name };
-        }
-    } catch (error) {
-        endpoint.appLogger.error(error);
-    }
+    let response = await web.users.info({ user: params.key });
+    return { key: params.key, value: response.user.name };
 };
 
 endpoint.functions.__convertChannel = async ({ params }) => {
-    try {
-        let value;
-        let response = await web.conversations.info({ channel: params.key });
-        if (response.ok) {
-            if (response.channel.is_im) {
-                let userResponse = web.users.info({ user: response.channel.user });
-                if (userResponse.ok) {
-                    value = '@' + userResponse.user.name
-                } else {
-                    value = '@' + response.channel.user
-                }
-            } else if (response.channel.is_channel) {
-                value = '#' + response.channel.name
-            } else {
-                value = response.channel.name
-            }
-            return { key: params.key, value: value };
+    let value;
+    let response = await web.conversations.info({ channel: params.key });
+    if (response.channel.is_im) {
+        let userResponse = web.users.info({ user: response.channel.user });
+        if (userResponse.ok) {
+            value = '@' + userResponse.user.name
+        } else {
+            value = '@' + response.channel.user
         }
-    } catch (error) {
-        endpoint.appLogger.error(error);
+    } else if (response.channel.is_channel) {
+        value = '#' + response.channel.name
+    } else {
+        value = response.channel.name
     }
+    return { key: params.key, value: value };
 };
 
 endpoint.functions.__convertTimestamp = async ({ params }) => {
-    try {
-        let ts = moment(params.key, "X").format('X');
-        if (ts) return { key: params.key, value: parseInt(ts) * 1000 };
-    } catch (error) {
-        endpoint.appLogger.error(error);
-    }
+    let ts = moment(params.key, "X").format('X');
+    if (ts) return { key: params.key, value: parseInt(ts) * 1000 };
 };
 
 endpoint.functions.__downloadFile = async ({ params, id }) => {
@@ -135,6 +107,7 @@ async function uploadFile(fileId, fileName) {
     });
 }
 
+// web services
 endpoint.webServices.events = {
     method: 'POST',
     path: '/events',
@@ -149,7 +122,7 @@ endpoint.webServices.events = {
             endpoint.appLogger.info('Invalid [slashCommandsToken]', payload);
             return res.send(payload.challenge);
         }
-        endpoint.events.send('eventArrived', payload);
+        endpoint.events.send('httpEventArrived', payload);
     }
 }
 
@@ -165,7 +138,7 @@ endpoint.webServices.slashCommands = {
         }
         endpoint.appLogger.info(`Received slash command [${payload.command}]`);
         endpoint.events.send('slashCommand', payload);
-        res.send();
+        res.send('');
     }
 }
 
@@ -175,7 +148,7 @@ endpoint.webServices.interactiveMessages = {
     handler: async (req, res) => {
         endpoint.appLogger.info(`Received interactive message`);
         endpoint.events.send('interactiveMessage', req.body || {});
-        res.send('ok');
+        res.send('');
     }
 }
 

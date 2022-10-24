@@ -21,13 +21,12 @@ var downloadFile = function (options, callbackData, callbacks) {
 };
 
 var respondToSlashCommand = function (url, msg) {
-    sys.logs.error('*** FIRST POINT');
-    sys.logs.error('*** URL: ' + url);
-    sys.logs.error('*** MSG: ' + JSON.stringify(msg));
+    if (!url) throw 'URL is empty';
     return endpoint._respondToSlashCommand({ responseUrl: url, message: msg });
 };
 
 var respondToInteractiveMessage = function (url, msg) {
+    if (!url) throw 'URL is empty';
     return endpoint._respondToInteractiveMessage({ responseUrl: url, message: msg });
 };
 
@@ -242,15 +241,11 @@ endpoint.getTeamName = function (id) {
         throw 'Team id is empty'
     }
     var response = null;
-    try {
-        var r = endpoint.__convertTeam({
-            key: id
-        });
-        if (r && r.value) {
-            response = r.value;
-        }
-    } catch (e) {
-        sys.logs.error('There are problems to get the name of the team [' + id + ']', e);
+    var r = endpoint.__convertTeam({
+        key: id
+    });
+    if (r && r.value) {
+        response = r.value;
     }
     return response;
 };
@@ -260,15 +255,11 @@ endpoint.getUserName = function (id) {
         throw 'User id is empty'
     }
     var response = null;
-    try {
-        var r = endpoint.__convertUser({
-            key: id
-        });
-        if (r && r.value) {
-            response = r.value;
-        }
-    } catch (e) {
-        sys.logs.error('There are problems to get the name of the user [' + id + ']', e);
+    var r = endpoint.__convertUser({
+        key: id
+    });
+    if (r && r.value) {
+        response = r.value;
     }
     return response;
 };
@@ -278,15 +269,11 @@ endpoint.getChannelName = function (id) {
         throw 'Channel id is empty'
     }
     var response = null;
-    try {
-        var r = endpoint.__convertChannel({
-            key: id
-        });
-        if (r && r.value) {
-            response = r.value;
-        }
-    } catch (e) {
-        sys.logs.error('There are problems to get the name of the channel [' + id + ']', e);
+    var r = endpoint.__convertChannel({
+        key: id
+    });
+    if (r && r.value) {
+        response = r.value;
     }
     return response;
 };
@@ -296,15 +283,11 @@ endpoint.getDate = function (timestamp) {
         throw 'Timestamp is empty'
     }
     var response = null;
-    try {
-        var r = endpoint.__convertTimestamp({
-            key: timestamp
-        });
-        if (r && r.value) {
-            response = new Date(r.value);
-        }
-    } catch (e) {
-        sys.logs.error('There are problems to get the date of the timestamp [' + timestamp + ']', e);
+    var r = endpoint.__convertTimestamp({
+        key: timestamp
+    });
+    if (r && r.value) {
+        response = new Date(r.value);
     }
     return response;
 };
