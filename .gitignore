@@ -7,3 +7,5 @@ endpoint_proxy.properties
 endpoint_local.properties
 run.sh
 test.sh
+.env
+tmp
