@@ -1,13 +1,11 @@
 
 var genericSlackFunction = function (options) {
     options = options || {};
-
     return endpoint.__request(options);
 };
 
 var slackFunction = function (path, options) {
     options = options || {};
-
     return genericSlackFunction({
         path: path,
         params: options
@@ -16,7 +14,6 @@ var slackFunction = function (path, options) {
 
 var downloadFile = function (options, callbackData, callbacks) {
     options = options || {};
-
     return endpoint.__downloadFile(options, callbackData, callbacks);
 };
 

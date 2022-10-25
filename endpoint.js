@@ -1,38 +1,80 @@
-// TODO:
-// - Events: eventArrived (RTM Client) - In Progress
-// - Functions: __downloadFile (callback: fileDownloaded) - Pending
-
-// - Functions:
-// - get -> genericSlackRequest() - Done
-// - post -> genericSlackRequest() - Done
-// - _respondToSlashCommand, - Done
-// - _respondToInteractiveMessage - Done
-// - __convertTeam - Done
-// - __convertUser - Done
-// - __convertChannel - Done
-// - __convertTimestamp - Done
-// - __convertEvent - Deprecated
-
 const endpoint = require('slingr-endpoints'),
     { WebClient } = require('@slack/web-api'),
-    { createReadStream } = require('fs'),
     moment = require('moment');
 
-let web;
+let web, userWeb;
 endpoint.hooks.onEndpointStart = async () => {
     web = new WebClient(endpoint.endpointConfig.botApiToken);
+    userWeb = endpoint.endpointConfig.userApiToken ? new WebClient(endpoint.endpointConfig.userApiToken) : null;
 }
 
 // genericSlackRequest
 endpoint.functions.__request = async ({ params }) => {
     let opts = params.params;
     if (params.path === 'files.upload') {
-        uploadFile(params.file_id)
-        return { uploadFile: true };
+        return await uploadFile(opts);
     }
-    let fn = params.path.split('.').reduce((o, i) => o[i], web)
+    let fn;
+    if (userWeb && opts.send_as_user) {
+        delete opts.send_as_user;
+        fn = params.path.split('.').reduce((o, i) => o[i], userWeb);
+    } else {
+        fn = params.path.split('.').reduce((o, i) => o[i], web);
+    }
     let res = await fn(opts);
     return res;
+};
+
+async function uploadFile(options) {
+    let content = await endpoint.files.download(options.file_id);
+    if (!content) return null;
+    // Upload File to Slack
+    delete options.file_id;
+    options.file = content;
+    if (userWeb && options.send_as_user) {
+        delete options.send_as_user;
+        return await userWeb.files.upload(options);
+    }
+    return await web.files.upload(options);
+};
+
+endpoint.functions.__downloadFile = async ({ params }) => {
+    if (!params.file_id) {
+        throw 'Empty file id'
+    }
+    var fileInfo = await web.files.info({ file: params.file_id });
+    if (!fileInfo) throw 'File not found';
+    // sync download
+    if (params.sync) {
+        try {
+            var downloadResponse = await endpoint.httpModule.get(fileInfo.file.url_private_download);
+        } catch (error) {
+            endpoint.logger.error('Couldn\'t download the file from [' + fileInfo.file.url_private_download + '].', error);
+        }
+        return await endpoint.files.upload(fileInfo.file.name, downloadResponse.data);
+        // async download
+    } else {
+        endpoint.httpModule.get(fileInfo.file.url_private_download).then(
+            (downloadResponse) => {
+                //And upload it to the platform
+                endpoint.files.upload(fileInfo.file.name, downloadResponse.data).then(
+                    (file) => {
+                        //In this case, the info will be sent asynchronously via events
+                        endpoint.events.send('fileDownloaded', file);
+                    }
+                ).catch(
+                    (error) => {
+                        endpoint.logger.error('Couldn\'t upload the file to platform.', error);
+                    }
+                );
+            }
+        ).catch(
+            (error) => {
+                endpoint.logger.error('Couldn\'t download the file from [' + fileInfo.file.url_private_download + '].', error);
+            }
+        );
+        return { status: 'ok', message: 'A file will be downloaded and then uploaded to the platform. This processing will be made asynchronously. An event will be fired when the download/upload is complete.' };
+    }
 };
 
 // function used for slashCommands and interactiveMessages features
@@ -85,27 +127,6 @@ endpoint.functions.__convertTimestamp = async ({ params }) => {
     let ts = moment(params.key, "X").format('X');
     if (ts) return { key: params.key, value: parseInt(ts) * 1000 };
 };
-
-endpoint.functions.__downloadFile = async ({ params, id }) => {
-    // private genericDownloadRequest()
-    (async () => {
-        // await endpoint.files.download(fileId); // If file is from slingr
-        // when file finished download
-        // if file is from slack use slack client
-        // endpoint.events.send('fileDownloaded', fileDownloaded, id);
-    })();
-    return { ok: true };
-}
-
-async function uploadFile(fileId, fileName) {
-    let content = await endpoint.files.download(fileId);
-    if (!content) return null;
-    // Upload File to Slack
-    return await web.files.upload({
-        filename: fileName || new Date().getTime(),
-        file: createReadStream(content)
-    });
-}
 
 // web services
 endpoint.webServices.events = {

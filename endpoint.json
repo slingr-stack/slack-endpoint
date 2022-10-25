@@ -34,17 +34,12 @@
     "stores": [],
     "events": [
         {
-            "label": "Real time event",
-            "name": "eventArrived",
-            "description": "Happens when any real time event is received from Slack."
-        },
-        {
-            "label": "HTTP event",
+            "label": "HTTP Event",
             "name": "httpEventArrived",
             "description": "Happens when any event from events API is received from Slack."
         },
         {
-            "label": "Slash command",
+            "label": "Slash Command",
             "name": "slashCommand",
             "description": "Happens when a slash command handled by the endpoint is called."
         },
@@ -84,12 +79,7 @@
         {
             "label": "Internal call to download a file",
             "name": "__downloadFile",
-            "description": "Internal call to download a file",
-            "callbacks": [
-                {
-                    "name": "fileDownloaded"
-                }
-            ]
+            "description": "Internal call to download a file"
         },
         {
             "label": "Internal request",
@@ -110,10 +100,6 @@
         {
             "label": "Internal timestamp conversion",
             "name": "__convertTimestamp"
-        },
-        {
-            "label": "Internal event conversion",
-            "name": "__convertEvent"
         }
     ],
     "scripts":[
@@ -144,6 +130,13 @@
             "type": "text"
         },
         {
+            "name": "eventsUrl",
+            "label": "Events URL",
+            "description": "This is the URL you need to set as 'Request URL' in 'Event Subscriptions' page of your app. Keep in mind that the endpoint must be deployed in order to interact with the Slack configuration page.",
+            "type": "label",
+            "value": "config.WEBHOOK_URL+'/events'"
+        },
+        {
             "name": "slashCommandsUrl",
             "label": "Slash commands URL",
             "description": "This is the URL you need to set as Request URL in each of you Slash commands.",
@@ -163,13 +156,6 @@
             "description": "This is the URL you need to set as 'Options Load URL' in 'Interactive Messages' page of your app.",
             "type": "label",
             "value": "config.WEBHOOK_URL+'/optionsLoad'"
-        },
-        {
-            "name": "eventsUrl",
-            "label": "Events URL",
-            "description": "This is the URL you need to set as 'Request URL' in 'Event Subscriptions' page of your app. Keep in mind that the endpoint must be deployed in order to interact with the Slack configuration page.",
-            "type": "label",
-            "value": "config.WEBHOOK_URL+'/events'"
         },
         {
             "name": "appConfig",
