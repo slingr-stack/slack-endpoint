@@ -1,7 +1,7 @@
 ---
 title: Slack endpoint
 keywords: 
-last_updated: April 25, 2022
+last_updated: October 25, 2022
 tags: []
 summary: "Detailed description of the API of the Slack endpoint."
 ---
