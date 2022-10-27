@@ -15,6 +15,7 @@ endpoint.functions.__request = async ({ params }) => {
         return await uploadFile(opts);
     }
     let fn;
+    if (!opts) return {ok: true, message: 'Event response received without params'}; // This validation is because the response to some events is returned from the runtime, so the empty parameter arrives.
     if (userWeb && opts.send_as_user) {
         delete opts.send_as_user;
         fn = params.path.split('.').reduce((o, i) => o[i], userWeb);
@@ -82,6 +83,7 @@ const responseUrlRequest = async data => {
     if (!data || !data.responseUrl) {
         throw 'Empty response url'
     }
+    console.log(data);
     let response = await endpoint.httpModule.post(data.responseUrl, data.message || {});
     endpoint.appLogger.info("Executed slack request to URL [" + data.responseUrl + "]");
     return response.data
