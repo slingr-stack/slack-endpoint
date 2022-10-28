@@ -146,6 +146,7 @@ endpoint.webServices.events = {
             return res.send(payload.challenge);
         }
         endpoint.events.send('httpEventArrived', payload);
+        res.send('ok');
     }
 }
 
