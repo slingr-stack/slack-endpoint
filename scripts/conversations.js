@@ -14,7 +14,7 @@ var registeredConvos = {};
 var matchMessage = function(event, patterns, messageTypes, callback) {
     var botUserId = getBotUserId();
     if (event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') {
-        var msg = event.data.payload;
+        var msg = event.data;
         if (msg.type != 'message') {
             // if this is not a message we can discard it completely
             return false;
@@ -79,13 +79,13 @@ var matchMessage = function(event, patterns, messageTypes, callback) {
             }
         }
     } else if (event.endpointEvent == 'interactiveMessage') {
-        if (event.data.payload.type == 'dialog_submission') {
+        if (event.data.type == 'dialog_submission') {
             // dialogs submissions are not handled here
             return false;
         }
         // check patterns
         var checkPattern = function(event, pattern) {
-            var match = false, actions = event.data.payload.actions, keyValue, action, actionValue;
+            var match = false, actions = event.data.actions, keyValue, action, actionValue;
             if (pattern.indexOf('button[') == 0) {
                 try {
                     keyValue = pattern.substr('button['.length, pattern.length-'button['.length-1).split('=');
@@ -166,9 +166,9 @@ var matchMessage = function(event, patterns, messageTypes, callback) {
 var reply = function(event, msg) {
     var channel = '';
     if (event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') {
-        channel = event.data.payload.channel;
+        channel = event.data.channel;
     } else if (event.endpointEvent == 'interactiveMessage') {
-        channel = event.data.payload.channel.id;
+        channel = event.data.channel.id;
     } else if (event.endpointEvent == 'manual') {
         channel = event.channel;
     }
@@ -192,12 +192,12 @@ var reply = function(event, msg) {
  **/
 var replace = function(event, msg) {
     var channel, ts;
-    if ((event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') && event.data.payload.type == 'message') {
-        channel = event.data.payload.channel;
-        ts = event.data.payload.ts;
+    if ((event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') && event.data.type == 'message') {
+        channel = event.data.channel;
+        ts = event.data.ts;
     } else if (event.endpointEvent == 'interactiveMessage') {
-        channel = event.data.payload.channel.id;
-        ts = event.data.payload.message_ts;
+        channel = event.data.channel.id;
+        ts = event.data.message_ts;
     } else if (event.endpointEvent == 'manual') {
         sys.exceptions.throwException('badRequest', 'Cannot replace message when conversation has been manually triggered');
     }
@@ -274,11 +274,11 @@ var triggerConvo = function(id, channelId, userId) {
 var handleConvos = function(event) {
     var botUserId = getBotUserId();
     if (event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') {
-        if (event.data.payload.type != 'message') {
+        if (event.data.type != 'message') {
             // if this is not a message we can discard it completely
             return false;
         }
-        if (event.data.payload.user == botUserId) {
+        if (event.data.user == botUserId) {
             // ignore messages comming from the bot to avoid loops
             return false;
         }
@@ -306,7 +306,7 @@ var handleConvos = function(event) {
                 var callbacks = JSON.parse(convo.callbacks);
                 // build message param
                 var message = {
-                    text: event.data.payload.text
+                    text: event.data.text
                 };
                 addInfoToMessage(message, event);
                 // update info in conversation
@@ -372,7 +372,7 @@ var handleConvos = function(event) {
             });
         }
     } else if (event.endpointEvent == 'interactiveMessage') {
-        if (event.data.payload.type == 'view_submission') {
+        if (event.data.type == 'view_submission') {
             // This type of event is avoided due to lack of channel information in the event payload. 
             return;
         }
@@ -390,7 +390,7 @@ var handleConvos = function(event) {
             convo = new Convo(convo);
             // build message param
             var message = {
-                callback_id: event.data.payload.callback_id
+                callback_id: event.data.callback_id
             };
             addInfoToMessage(message, event);
             convo.message = message;
@@ -414,13 +414,13 @@ var handleConvos = function(event) {
                     sys.storage.remove(convoId);
                 }
             };
-            if (event.data.payload.type == 'dialog_submission') {
+            if (event.data.type == 'dialog_submission') {
                 if (!convo.dialogCallback) {
                     return;
                 }
                 var dialogCallback = JSON.parse(convo.dialogCallback);
                 convo.dialogCallback = null;
-                message.submission = event.data.payload.submission;
+                message.submission = event.data.submission;
                 executeCallback(dialogCallback, message, event);
                 return;
             } else if (convo.isWaiting()) {
@@ -429,7 +429,7 @@ var handleConvos = function(event) {
                 convo.event = event;
                 convo.waitingResponse = false;
                 convo.dialogCallback = null;
-                message.actions = event.data.payload.actions;
+                message.actions = event.data.actions;
                 var match = false;
                 for (var i in callbacks) {
                     var callback = callbacks[i];
@@ -522,10 +522,10 @@ var Convo = function(info) {
     };
 
     self.openDialog = function(dialog, data, callback) {
-        if (!self.event || !self.event.data.payload.trigger_id) {
+        if (!self.event || !self.event.data.trigger_id) {
             sys.exceptions.throwException('badRequest', 'There is no trigger for the dialog');
         }
-        endpoint.dialog.open({trigger_id: self.event.data.payload.trigger_id, dialog: dialog});
+        endpoint.dialog.open({trigger_id: self.event.data.trigger_id, dialog: dialog});
         self.dialogCallback = self.convertDialogCallbackToString({
             callback: callback,
             data: data
@@ -591,12 +591,12 @@ var Convo = function(info) {
 
 var buildConvoId = function(event) {
     if (event.endpointEvent == 'eventArrived' || event.endpointEvent == 'httpEventArrived') {
-        return convoPrefix+event.data.payload.user+'_'+event.data.payload.channel;
+        return convoPrefix+event.data.user+'_'+event.data.channel;
     } else if (event.endpointEvent == 'interactiveMessage') {
-        if (event.data.payload.channel) {
-        return convoPrefix+event.data.payload.user.id+'_'+event.data.payload.channel.id;
+        if (event.data.channel) {
+        return convoPrefix+event.data.user.id+'_'+event.data.channel.id;
         } else {
-            return convoPrefix+event.data.payload.user.id;
+            return convoPrefix+event.data.user.id;
         }
     } else {
         sys.exceptions.throwException('badRequest', 'Invalid event');

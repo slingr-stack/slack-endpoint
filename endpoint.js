@@ -83,7 +83,6 @@ const responseUrlRequest = async data => {
     if (!data || !data.responseUrl) {
         throw 'Empty response url'
     }
-    console.log(data);
     let response = await endpoint.httpModule.post(data.responseUrl, data.message || {});
     endpoint.appLogger.info("Executed slack request to URL [" + data.responseUrl + "]");
     return response.data
@@ -136,16 +135,12 @@ endpoint.webServices.events = {
     path: '/events',
     handler: (req, res) => {
         let payload = req.body || {};
-        let token = endpoint.endpointConfig.slashCommandsToken;
-        if (token !== payload.token) {
-            endpoint.appLogger.error('Invalid [slashCommandsToken]', payload);
+        if (payload.token !== endpoint.endpointConfig.verificationToken) {
+            endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
         }
-        if (payload.type === 'url_verification') {
-            endpoint.appLogger.info('Invalid [slashCommandsToken]', payload);
-            return res.send(payload.challenge);
-        }
-        endpoint.events.send('httpEventArrived', payload);
+        if (payload.type === 'url_verification') return res.send(payload.challenge);
+        endpoint.events.send('httpEventArrived', payload.event);
         res.send('ok');
     }
 }
@@ -155,36 +150,44 @@ endpoint.webServices.slashCommands = {
     path: '/slashCommands',
     handler: async (req, res) => {
         let payload = req.body || {};
-        let token = endpoint.endpointConfig.slashCommandsToken;
-        if (token !== payload.token) {
-            endpoint.appLogger.error('Invalid [slashCommandsToken]', payload);
+        if (payload.token !== endpoint.endpointConfig.verificationToken) {
+            endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
         }
         endpoint.appLogger.info(`Received slash command [${payload.command}]`);
         endpoint.events.send('slashCommand', payload);
         res.send('');
     }
-}
+};
 
 endpoint.webServices.interactiveMessages = {
     method: 'POST',
     path: '/interactiveMessages',
     handler: async (req, res) => {
+        let payload = req.body.payload || {};
+        if (payload.token !== endpoint.endpointConfig.verificationToken) {
+            endpoint.appLogger.error('Invalid [verificationToken]', payload);
+            return res.status(401).send('Error');
+        }
         endpoint.appLogger.info(`Received interactive message`);
-        let payload = JSON.parse('' + req.body.payload);
         endpoint.events.send('interactiveMessage', payload || {});
         res.send('');
     }
-}
+};
 
 endpoint.webServices.optionsLoad = {
     method: 'POST',
     path: '/optionsLoad',
     handler: async (req, res) => {
+        let payload = req.body.payload || {};
+        if (payload.token !== endpoint.endpointConfig.verificationToken) {
+            endpoint.appLogger.error('Invalid [verificationToken]', payload);
+            return res.status(401).send('Error');
+        }
         endpoint.appLogger.info(`Received options load`);
-        endpoint.events.send('optionsLoad', req.body || {});
+        endpoint.events.send('optionsLoad', payload || {});
         res.send('ok');
     }
-}
+};
 
 endpoint.start();

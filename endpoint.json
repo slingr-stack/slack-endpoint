@@ -124,7 +124,7 @@
             "required": true
         },
         {
-            "name": "slashCommandsToken",
+            "name": "verificationToken",
             "label": "Verification token",
             "description": "Token provided to verify that requests are actually coming from Slack (OAuth Information -> Verification Token)",
             "type": "text"
