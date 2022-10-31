@@ -15,7 +15,7 @@ endpoint.functions.__request = async ({ params }) => {
         return await uploadFile(opts);
     }
     let fn;
-    if (!opts) return {ok: true, message: 'Event response received without params'}; // This validation is because the response to some events is returned from the runtime, so the empty parameter arrives.
+    if (!opts) return { ok: true, message: 'Event response received without params' }; // This validation is because the response to some events is returned from the runtime, so the empty parameter arrives.
     if (userWeb && opts.send_as_user) {
         delete opts.send_as_user;
         fn = params.path.split('.').reduce((o, i) => o[i], userWeb);
@@ -171,7 +171,8 @@ endpoint.webServices.interactiveMessages = {
     path: '/interactiveMessages',
     handler: async (req, res) => {
         endpoint.appLogger.info(`Received interactive message`);
-        endpoint.events.send('interactiveMessage', req.body || {});
+        let payload = JSON.parse('' + req.body.payload);
+        endpoint.events.send('interactiveMessage', payload || {});
         res.send('');
     }
 }
