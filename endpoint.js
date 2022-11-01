@@ -134,7 +134,7 @@ endpoint.webServices.events = {
     method: 'POST',
     path: '/events',
     handler: (req, res) => {
-        let payload = req.body || {};
+        let payload = endpoint.parsePayloadType(req.body) || {};
         if (payload.token !== endpoint.endpointConfig.verificationToken) {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
@@ -149,7 +149,7 @@ endpoint.webServices.slashCommands = {
     method: 'POST',
     path: '/slashCommands',
     handler: async (req, res) => {
-        let payload = req.body || {};
+        let payload = endpoint.parsePayloadType(req.body) || {};
         if (payload.token !== endpoint.endpointConfig.verificationToken) {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
@@ -164,8 +164,7 @@ endpoint.webServices.interactiveMessages = {
     method: 'POST',
     path: '/interactiveMessages',
     handler: async (req, res) => {
-        let payload = req.body.payload || {};
-        payload = (typeof(payload) !== 'string') ? payload : JSON.parse(payload);
+        let payload = endpoint.parsePayloadType(req.body.payload) || {};
         if (payload.token !== endpoint.endpointConfig.verificationToken) {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
@@ -180,7 +179,7 @@ endpoint.webServices.optionsLoad = {
     method: 'POST',
     path: '/optionsLoad',
     handler: async (req, res) => {
-        let payload = req.body.payload || {};
+        let payload = endpoint.parsePayloadType(req.body.payload) || {};
         if (payload.token !== endpoint.endpointConfig.verificationToken) {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
@@ -189,6 +188,11 @@ endpoint.webServices.optionsLoad = {
         endpoint.events.send('optionsLoad', payload || {});
         res.send('ok');
     }
+};
+
+// function to parse the payload type if it is not an object
+endpoint.parsePayloadType = (payload) => {
+    return (typeof(payload) !== 'object') ? JSON.parse(payload) : payload;
 };
 
 endpoint.start();
