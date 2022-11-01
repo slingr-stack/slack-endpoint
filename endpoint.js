@@ -165,6 +165,7 @@ endpoint.webServices.interactiveMessages = {
     path: '/interactiveMessages',
     handler: async (req, res) => {
         let payload = req.body.payload || {};
+        payload = (typeof(payload) !== 'string') ? payload : JSON.parse(payload);
         if (payload.token !== endpoint.endpointConfig.verificationToken) {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
