@@ -4,9 +4,17 @@ const endpoint = require('slingr-endpoints'),
 
 let web, userWeb;
 endpoint.hooks.onEndpointStart = async () => {
+    endpoint.logger.info('From Hook - Slack endpoint has started');
+    endpoint.appLogger.info('From Hook - Slack endpoint has started');
     web = new WebClient(endpoint.endpointConfig.botApiToken);
     userWeb = endpoint.endpointConfig.userApiToken ? new WebClient(endpoint.endpointConfig.userApiToken) : null;
 }
+
+endpoint.hooks.onEndpointStop = (cause) => {
+    // The endpoint is about to stop at this point. Use this to release all resources that could cause a memory leak. 
+    endpoint.logger.info('From Hook - Slack endpoint is stopping.');
+    endpoint.appLogger.info('From Hook - Slack endpoint is stopping.', cause);
+};
 
 // genericSlackRequest
 endpoint.functions.__request = async ({ params }) => {
@@ -83,9 +91,9 @@ const responseUrlRequest = async data => {
     if (!data || !data.responseUrl) {
         throw 'Empty response url'
     }
-    let response = await endpoint.httpModule.post(data.responseUrl, data.message || {});
+    await endpoint.httpModule.post(data.responseUrl, data.message || {});
     endpoint.appLogger.info("Executed slack request to URL [" + data.responseUrl + "]");
-    return response.data
+    return {ok: true};
 };
 
 endpoint.functions._respondToSlashCommand = async ({ params }) => {
@@ -184,21 +192,6 @@ endpoint.webServices.optionsLoad = {
             endpoint.appLogger.error('Invalid [verificationToken]', payload);
             return res.status(401).send('Error');
         }
-        endpoint.appLogger.info(`Received options load`);
-        endpoint.events.send('optionsLoad', payload || {});
-        res.send('ok');
-    }
-};
-
-endpoint.webServices.optionsLoad = {
-    method: 'POST',
-    path: '/optionsLoad',
-    handler: async (req, res) => {
-        let payload = endpoint.parsePayloadType(req.body.payload) || {};
-        if (payload.token !== endpoint.endpointConfig.verificationToken) {
-            endpoint.appLogger.error('Invalid [verificationToken]', payload);
-            return res.status(401).send('Error');
-        }
         if (payload.ssl_check) {
             res.send({});
             return {};
@@ -207,8 +200,8 @@ endpoint.webServices.optionsLoad = {
         let options = [];
         try {
             options = await endpoint.events.sendSync('optionsLoad', payload || {});
-        } catch (e) {
-            endpoint.appLogger.error('There was an error loading options', e);
+        } catch (error) {
+            endpoint.appLogger.error('There was an error loading options', error);
         }
         res.send(options);
     }
@@ -219,4 +212,10 @@ endpoint.parsePayloadType = (payload) => {
     return (typeof (payload) !== 'object') ? JSON.parse(payload) : payload;
 };
 
+process.on('uncaughtException', (error) => {
+    endpoint.appLogger.error('Uncaught Exception', error);
+    endpoint.logger.error('Uncaught Exception', error);
+});
+
+// Always call this method at the end of the file to run the endpoint
 endpoint.start();
