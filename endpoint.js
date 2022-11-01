@@ -190,9 +190,33 @@ endpoint.webServices.optionsLoad = {
     }
 };
 
+endpoint.webServices.optionsLoad = {
+    method: 'POST',
+    path: '/optionsLoad',
+    handler: async (req, res) => {
+        let payload = endpoint.parsePayloadType(req.body.payload) || {};
+        if (payload.token !== endpoint.endpointConfig.verificationToken) {
+            endpoint.appLogger.error('Invalid [verificationToken]', payload);
+            return res.status(401).send('Error');
+        }
+        if (payload.ssl_check) {
+            res.send({});
+            return {};
+        }
+        endpoint.appLogger.info(`Received options load`);
+        let options = [];
+        try {
+            options = await endpoint.events.sendSync('optionsLoad', payload || {});
+        } catch (e) {
+            endpoint.appLogger.error('There was an error loading options', e);
+        }
+        res.send(options);
+    }
+};
+
 // function to parse the payload type if it is not an object
 endpoint.parsePayloadType = (payload) => {
-    return (typeof(payload) !== 'object') ? JSON.parse(payload) : payload;
+    return (typeof (payload) !== 'object') ? JSON.parse(payload) : payload;
 };
 
 endpoint.start();
