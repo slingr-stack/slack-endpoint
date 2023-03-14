@@ -94,3 +94,16 @@ var stringToObject = function (obj) {
   }
   return null;
 };
+
+var genericSlackFunction = function (options) {
+  options = options || {};
+  return endpoint.__request(options);
+};
+
+var slackFunction = function (path, options) {
+  options = options || {};
+  return genericSlackFunction({
+    path: path,
+    params: options
+  });
+};
