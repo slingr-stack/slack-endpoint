@@ -1,13 +1,13 @@
 {
-  "label": "Send a message to a channel",
-  "name": "sendMessageToChannelSlack",
+  "label": "Deletes a message.",
+  "name": "deleteMessageToChannelSlack",
   "category": "integrations",
-  "description": "Send a message to a channel",
+  "description": "This step deletes a message from a conversation.",
   "inputs": [
     {
       "label": "Channel",
       "name": "channel",
-      "description": "The channel to which the message will be sent",
+      "description": "Channel containing the message to be deleted.",
       "type": "text",
       "required": "true",
       "options": {
@@ -15,9 +15,9 @@
       }
     },
     {
-      "label": "Message",
-      "name": "message",
-      "description": "The message which will be sent to a channel",
+      "label": "Message Id",
+      "name": "messageId",
+      "description": "Timestamp of the message to be deleted. Example\n\"1405894322.002768\"",
       "type": "text",
       "required": "true",
       "options": {

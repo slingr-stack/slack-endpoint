@@ -108,7 +108,11 @@
     ],
     "flowSteps": [
         "apiCallSlack",
-        "sendMessageToChannelSlack"
+        "conversationsHistorySlack",
+        "deleteMessageToChannelSlack",
+        "sendMessageToChannelSlack",
+        "updateMessageToChannelSlack",
+        "userInfoSlack"
     ],
     "listeners":[
         "conversations.js"
