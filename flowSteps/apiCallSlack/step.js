@@ -53,7 +53,7 @@ step.apiCallSlack = function (inputs) {
   }
 
   var url = inputsLogic.url.urlValue;
-  sys.logs.debug('[slack] POST from: ' + url);
+  sys.logs.debug('[Api Call Slack] ' + inputsLogic.method + ' from: ' + url);
   return slackFunction(url, options);
 
 };
