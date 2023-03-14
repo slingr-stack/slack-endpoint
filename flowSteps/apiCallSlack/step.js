@@ -52,30 +52,10 @@ step.apiCallSlack = function (inputs) {
     readTimeout: inputsLogic.readTimeout
   }
 
-	switch (inputsLogic.method.toLowerCase()) {
-    case 'get':
-      return endpoint._get(options);
-    case 'post':
-      return endpoint._post(options);
-    case 'delete':
-      return endpoint._delete(options);
-    case 'put':
-      return endpoint._put(options);
-    case 'connect':
-      return endpoint._connect(options);
-    case 'head':
-      return endpoint._head(options);
-    case 'options':
-      return endpoint._options(options);
-    case 'patch':
-      return endpoint._patch(options);
-    case 'trace':
-      return endpoint._trace(options);
-  }
+  var url = inputsLogic.url.urlValue;
+  sys.logs.debug('[slack] POST from: ' + url);
+  return slackFunction(url, options);
 
-  
-
-  return null;
 };
 
 var parse = function (url, pathVariables){
