@@ -2,7 +2,7 @@
   "label": "Updates a message.",
   "name": "updateMessageToChannelSlack",
   "category": "integrations",
-  "description": "This step updates a message in a channel. ",
+  "description": "This step updates a message in a channel.",
   "inputs": [
     {
       "label": "Channel",
@@ -17,7 +17,7 @@
     {
       "label": "Message Id",
       "name": "messageId",
-      "description": "Timestamp of the message to be deleted. Example\n\"1405894322.002768\"",
+      "description": "Timestamp of the message to be updated. Example\n\"1405894322.002768\"",
       "type": "text",
       "required": "true",
       "options": {
@@ -27,7 +27,7 @@
     {
       "label": "Message",
       "name": "message",
-      "description": "New text for the message",
+      "description": "New text for the message.",
       "type": "text",
       "required": "true",
       "options": {

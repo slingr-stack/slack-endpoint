@@ -1512,18 +1512,6 @@ Generic flow step for full use of the entire endpoint and its services.
     </thead>
     <tbody>
     <tr>
-        <td>URL (Method)</td>
-        <td>choice</td>
-        <td>yes</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            This is the http method to be used against the endpoint. <br>
-            Possible values are: <br>
-            <i><strong>POST,GET</strong></i>
-        </td>
-    </tr>
-    <tr>
         <td>URL (Path)</td>
         <td>choice</td>
         <td>yes</td>
@@ -1670,9 +1658,7 @@ Generic flow step for full use of the entire endpoint and its services.
     <tr>
         <td>response</td>
         <td>object</td>
-        <td>
-            Object resulting from the response to the endpoint call.
-        </td>
+        <td>Object resulting from the response to the endpoint call.</td>
     </tr>
     </tbody>
 </table>
@@ -1692,12 +1678,285 @@ For more information about how shortcuts or flow steps works, and how they are g
 
 
 
-### Custom Flow Steps Name
+### Conversations History
 
-Description of Custom Flow Steps
+Gets a conversation's history
 
-*MANUALLY ADD THE DOCUMENTATION OF THESE FLOW STEPS HERE...*
+<h3>Inputs</h3>
 
+<table>
+    <thead>
+    <tr>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Visibility</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>Channel</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Conversation ID to fetch history for.</td>
+      </tr>
+    </tbody>
+</table>
+
+<h3>Outputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>response</td>
+        <td>object</td>
+        <td>Object resulting from the response to the endpoint call.</td>
+    </tr>
+    </tbody>
+</table>
+
+
+### Delete Message to channel
+
+This step deletes a message from a conversation.
+
+<h3>Inputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Visibility</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>Channel</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Channel containing the message to be deleted.</td>
+      </tr>
+      <tr>
+          <td>Message Id</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Timestamp of the message to be deleted. Example "1405894322.002768"</td>
+      </tr>
+    </tbody>
+</table>
+
+<h3>Outputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>response</td>
+        <td>object</td>
+        <td>Object resulting from the response to the endpoint call.</td>
+    </tr>
+    </tbody>
+</table>
+
+### Send message to channel
+
+Send a message to a channel.
+
+<h3>Inputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Visibility</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>Channel</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Channel containing the message to be deleted.</td>
+      </tr>
+      <tr>
+          <td>Message</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>The message which will be sent to a channel.</td>
+      </tr>
+    </tbody>
+</table>
+
+<h3>Outputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>response</td>
+        <td>object</td>
+        <td>
+            Object resulting from the response to the endpoint call.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+### Update message to channel
+
+This step updates a message in a channel.
+
+<h3>Inputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Visibility</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>Channel</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Channel containing the message to be deleted.</td>
+      </tr>
+      <tr>
+          <td>Message Id</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>Timestamp of the message to be updated. Example "1405894322.002768"</td>
+      </tr>
+      <tr>
+          <td>Message</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>The message which will be sent to a channel</td>
+      </tr>
+    </tbody>
+</table>
+
+<h3>Outputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>response</td>
+        <td>object</td>
+        <td>
+            Object resulting from the response to the endpoint call.
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+### User Info
+
+This step returns information about a member of a workspace.
+
+<h3>Inputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Required</th>
+        <th>Default</th>
+        <th>Visibility</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+          <td>User Id</td>
+          <td>text</td>
+          <td>yes</td>
+          <td> - </td>
+          <td>Always</td>
+          <td>User id to get info</td>
+      </tr>
+    </tbody>
+</table>
+
+<h3>Outputs</h3>
+
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>response</td>
+        <td>object</td>
+        <td>
+            Object resulting from the response to the endpoint call.
+        </td>
+    </tr>
+    </tbody>
+</table>
 
 </details>
 
