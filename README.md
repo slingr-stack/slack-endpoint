@@ -660,9 +660,9 @@ The Javascript API of the slack endpoint has three pieces:
 ## HTTP requests
 You can make `POST`,`GET` requests to the [slack API](API_URL_HERE) like this:
 ```javascript
-var response = app.endpoints.slack.post('/groups.create', body)
-var response = app.endpoints.slack.post('/groups.create')
-var response = app.endpoints.slack.get('/search.files')
+var response = app.endpoints.slack.post('/conversations.leave', body)
+var response = app.endpoints.slack.post('/conversations.leave')
+var response = app.endpoints.slack.get('/admin.emoji.list')
 ```
 
 Please take a look at the documentation of the [HTTP endpoint](https://github.com/slingr-stack/http-endpoint#javascript-api)
@@ -686,72 +686,6 @@ app.endpoints.slack.apiTest.post(body)
 * HTTP Method: 'POST'
 ```javascript
 app.endpoints.slack.authTest.post(body)
-```
----
-* API URL: '/channels.archive'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsArchive.post(body)
-```
----
-* API URL: '/channels.create'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsCreate.post(body)
-```
----
-* API URL: '/channels.invite'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsInvite.post(body)
-```
----
-* API URL: '/channels.join'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsJoin.post(body)
-```
----
-* API URL: '/channels.kick'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsKick.post(body)
-```
----
-* API URL: '/channels.leave'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsLeave.post(body)
-```
----
-* API URL: '/channels.mark'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsMark.post(body)
-```
----
-* API URL: '/channels.rename'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsRename.post(body)
-```
----
-* API URL: '/channels.setPurpose'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsSetPurpose.post(body)
-```
----
-* API URL: '/channels.setTopic'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsSetTopic.post(body)
-```
----
-* API URL: '/channels.unarchive'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.channelsUnarchive.post(body)
 ```
 ---
 * API URL: '/chat.delete'
@@ -898,22 +832,10 @@ app.endpoints.slack.dndEndDnd.post(body)
 app.endpoints.slack.dndEndSnooze.post(body)
 ```
 ---
-* API URL: '/files.comments.add'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.filesCommentsAdd.post(body)
-```
----
 * API URL: '/files.comments.delete'
 * HTTP Method: 'POST'
 ```javascript
 app.endpoints.slack.filesCommentsDelete.post(body)
-```
----
-* API URL: '/files.comments.edit'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.filesCommentsEdit.post(body)
 ```
 ---
 * API URL: '/files.delete'
@@ -938,120 +860,6 @@ app.endpoints.slack.filesSharedPublicURL.post(body)
 * HTTP Method: 'POST'
 ```javascript
 app.endpoints.slack.filesUpload.post(body)
-```
----
-* API URL: '/groups.archive'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsArchive.post(body)
-```
----
-* API URL: '/groups.close'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsClose.post(body)
-```
----
-* API URL: '/groups.create'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsCreate.post(body)
-```
----
-* API URL: '/groups.createChild'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsCreateChild.post(body)
-```
----
-* API URL: '/groups.invite'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsInvite.post(body)
-```
----
-* API URL: '/groups.kick'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsKick.post(body)
-```
----
-* API URL: '/groups.leave'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsLeave.post(body)
-```
----
-* API URL: '/groups.mark'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsMark.post(body)
-```
----
-* API URL: '/groups.open'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsOpen.post(body)
-```
----
-* API URL: '/groups.rename'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsRename.post(body)
-```
----
-* API URL: '/groups.setPurpose'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsSetPurpose.post(body)
-```
----
-* API URL: '/groups.setTopic'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsSetTopic.post(body)
-```
----
-* API URL: '/groups.unarchive'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.groupsUnarchive.post(body)
-```
----
-* API URL: '/im.close'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.imClose.post(body)
-```
----
-* API URL: '/im.mark'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.imMark.post(body)
-```
----
-* API URL: '/im.open'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.imOpen.post(body)
-```
----
-* API URL: '/mpim.close'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.mpimClose.post(body)
-```
----
-* API URL: '/mpim.mark'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.mpimMark.post(body)
-```
----
-* API URL: '/mpim.open'
-* HTTP Method: 'POST'
-```javascript
-app.endpoints.slack.mpimOpen.post(body)
 ```
 ---
 * API URL: '/oauth.access'
@@ -1180,30 +988,6 @@ app.endpoints.slack.authRevoke.get()
 app.endpoints.slack.botsInfo.get()
 ```
 ---
-* API URL: '/channels.history'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.channelsHistory.get()
-```
----
-* API URL: '/channels.info'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.channelsInfo.get()
-```
----
-* API URL: '/channels.list'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.channelsList.get()
-```
----
-* API URL: '/channels.replies'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.channelsReplies.get()
-```
----
 * API URL: '/conversations.history'
 * HTTP Method: 'GET'
 ```javascript
@@ -1252,10 +1036,10 @@ app.endpoints.slack.dndSetSnooze.get()
 app.endpoints.slack.dndTeamInfo.get()
 ```
 ---
-* API URL: '/emoji.list'
+* API URL: '/admin.emoji.list'
 * HTTP Method: 'GET'
 ```javascript
-app.endpoints.slack.emojiList.get()
+app.endpoints.slack.adminEmojiList.get()
 ```
 ---
 * API URL: '/files.info'
@@ -1268,66 +1052,6 @@ app.endpoints.slack.filesInfo.get()
 * HTTP Method: 'GET'
 ```javascript
 app.endpoints.slack.filesList.get()
-```
----
-* API URL: '/groups.history'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.groupsHistory.get()
-```
----
-* API URL: '/groups.info'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.groupsInfo.get()
-```
----
-* API URL: '/groups.list'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.groupsList.get()
-```
----
-* API URL: '/groups.replies'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.groupsReplies.get()
-```
----
-* API URL: '/im.history'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.imHistory.get()
-```
----
-* API URL: '/im.list'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.imList.get()
-```
----
-* API URL: '/im.replies'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.imReplies.get()
-```
----
-* API URL: '/mpim.history'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.mpimHistory.get()
-```
----
-* API URL: '/mpim.list'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.mpimList.get()
-```
----
-* API URL: '/mpim.replies'
-* HTTP Method: 'GET'
-```javascript
-app.endpoints.slack.mpimReplies.get()
 ```
 ---
 * API URL: '/pins.list'
@@ -1512,6 +1236,18 @@ Generic flow step for full use of the entire endpoint and its services.
     </thead>
     <tbody>
     <tr>
+        <td>URL (Method)</td>
+        <td>choice</td>
+        <td>yes</td>
+        <td> - </td>
+        <td>Always</td>
+        <td>
+            This is the http method to be used against the endpoint. <br>
+            Possible values are: <br>
+            <i><strong>POST,GET</strong></i>
+        </td>
+    </tr>
+    <tr>
         <td>URL (Path)</td>
         <td>choice</td>
         <td>yes</td>
@@ -1520,7 +1256,7 @@ Generic flow step for full use of the entire endpoint and its services.
         <td>
             The url to which this endpoint will send the request. This is the exact service to which the http request will be made. <br>
             Possible values are: <br>
-            <i><strong>/api.test<br>/auth.test<br>/channels.archive<br>/channels.create<br>/channels.invite<br>/channels.join<br>/channels.kick<br>/channels.leave<br>/channels.mark<br>/channels.rename<br>/channels.setPurpose<br>/channels.setTopic<br>/channels.unarchive<br>/chat.delete<br>/chat.meMessage<br>/chat.postMessage<br>/chat.unfurl<br>/chat.update<br>/conversations.archive<br>/conversations.close<br>/conversations.create<br>/conversations.invite<br>/conversations.join<br>/conversations.kick<br>/conversations.leave<br>/conversations.open<br>/conversations.rename<br>/conversations.setPurpose<br>/conversations.setTopic<br>/conversations.unarchive<br>/dialog.open<br>/views.open<br>/views.update<br>/views.publish<br>/views.push<br>/dnd.endDnd<br>/dnd.endSnooze<br>/files.comments.add<br>/files.comments.delete<br>/files.comments.edit<br>/files.delete<br>/files.revokePublicURL<br>/files.sharedPublicURL<br>/files.upload<br>/groups.archive<br>/groups.close<br>/groups.create<br>/groups.createChild<br>/groups.invite<br>/groups.kick<br>/groups.leave<br>/groups.mark<br>/groups.open<br>/groups.rename<br>/groups.setPurpose<br>/groups.setTopic<br>/groups.unarchive<br>/im.close<br>/im.mark<br>/im.open<br>/mpim.close<br>/mpim.mark<br>/mpim.open<br>/oauth.access<br>/pins.add<br>/pins.remove<br>/reactions.add<br>/reactions.remove<br>/reminders.add<br>/reminders.complete<br>/reminders.delete<br>/stars.add<br>/stars.remove<br>/usergroups.create<br>/usergroups.disable<br>/usergroups.enable<br>/usergroups.update<br>/usergroups.users.update<br>/users.setActive<br>/users.setPhoto<br>/users.setPresence<br>/users.profile.set<br>/auth.revoke<br>/bots.info<br>/channels.history<br>/channels.info<br>/channels.list<br>/channels.replies<br>/conversations.history<br>/conversations.info<br>/conversations.list<br>/conversations.members<br>/conversations.replies<br>/dnd.info<br>/dnd.setSnooze<br>/dnd.teamInfo<br>/emoji.list<br>/files.info<br>/files.list<br>/groups.history<br>/groups.info<br>/groups.list<br>/groups.replies<br>/im.history<br>/im.list<br>/im.replies<br>/mpim.history<br>/mpim.list<br>/mpim.replies<br>/pins.list<br>/reactions.get<br>/reactions.list<br>/reminders.info<br>/reminders.list<br>/rtm.start<br>/rtm.connect<br>/search.all<br>/search.files<br>/search.messages<br>/stars.list<br>/team.accessLogs<br>/team.billableInfo<br>/team.info<br>/team.integrationLogs<br>/team.profile.get<br>/usergroups.list<br>/usergroups.users.list<br>/users.deletePhoto<br>/users.getPresence<br>/users.identity<br>/users.info<br>/users.list<br>/users.lookupByEmail<br>/users.profile.get<br></strong></i>
+            <i><strong>/api.test<br>/auth.test<br>/chat.delete<br>/chat.meMessage<br>/chat.postMessage<br>/chat.unfurl<br>/chat.update<br>/conversations.archive<br>/conversations.close<br>/conversations.create<br>/conversations.invite<br>/conversations.join<br>/conversations.kick<br>/conversations.leave<br>/conversations.open<br>/conversations.rename<br>/conversations.setPurpose<br>/conversations.setTopic<br>/conversations.unarchive<br>/dialog.open<br>/views.open<br>/views.update<br>/views.publish<br>/views.push<br>/dnd.endDnd<br>/dnd.endSnooze<br>/files.comments.delete<br>/files.delete<br>/files.revokePublicURL<br>/files.sharedPublicURL<br>/files.upload<br>/oauth.access<br>/pins.add<br>/pins.remove<br>/reactions.add<br>/reactions.remove<br>/reminders.add<br>/reminders.complete<br>/reminders.delete<br>/stars.add<br>/stars.remove<br>/usergroups.create<br>/usergroups.disable<br>/usergroups.enable<br>/usergroups.update<br>/usergroups.users.update<br>/users.setActive<br>/users.setPhoto<br>/users.setPresence<br>/users.profile.set<br>/auth.revoke<br>/bots.info<br>/conversations.history<br>/conversations.info<br>/conversations.list<br>/conversations.members<br>/conversations.replies<br>/dnd.info<br>/dnd.setSnooze<br>/dnd.teamInfo<br>/admin.emoji.list<br>/files.info<br>/files.list<br>/pins.list<br>/reactions.get<br>/reactions.list<br>/reminders.info<br>/reminders.list<br>/rtm.start<br>/rtm.connect<br>/search.all<br>/search.files<br>/search.messages<br>/stars.list<br>/team.accessLogs<br>/team.billableInfo<br>/team.info<br>/team.integrationLogs<br>/team.profile.get<br>/usergroups.list<br>/usergroups.users.list<br>/users.deletePhoto<br>/users.getPresence<br>/users.identity<br>/users.info<br>/users.list<br>/users.lookupByEmail<br>/users.profile.get<br></strong></i>
         </td>
     </tr>
     <tr>
@@ -1658,7 +1394,9 @@ Generic flow step for full use of the entire endpoint and its services.
     <tr>
         <td>response</td>
         <td>object</td>
-        <td>Object resulting from the response to the endpoint call.</td>
+        <td>
+            Object resulting from the response to the endpoint call.
+        </td>
     </tr>
     </tbody>
 </table>
