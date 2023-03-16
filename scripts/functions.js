@@ -40,23 +40,6 @@ endpoint.auth.test = function (options) { return slackFunction('auth.test', opti
 endpoint.bots = {};
 endpoint.bots.info = function (options) { return slackFunction('bots.info', options) };
 
-endpoint.channels = {};
-endpoint.channels.archive = function (options) { return slackFunction('channels.archive', options) };
-endpoint.channels.create = function (options) { return slackFunction('channels.create', options) };
-endpoint.channels.history = function (options) { return slackFunction('channels.history', options) };
-endpoint.channels.info = function (options) { return slackFunction('channels.info', options) };
-endpoint.channels.invite = function (options) { return slackFunction('channels.invite', options) };
-endpoint.channels.join = function (options) { return slackFunction('channels.join', options) };
-endpoint.channels.kick = function (options) { return slackFunction('channels.kick', options) };
-endpoint.channels.leave = function (options) { return slackFunction('channels.leave', options) };
-endpoint.channels.list = function (options) { return slackFunction('channels.list', options) };
-endpoint.channels.mark = function (options) { return slackFunction('channels.mark', options) };
-endpoint.channels.rename = function (options) { return slackFunction('channels.rename', options) };
-endpoint.channels.replies = function (options) { return slackFunction('channels.replies', options) };
-endpoint.channels.setPurpose = function (options) { return slackFunction('channels.setPurpose', options) };
-endpoint.channels.setTopic = function (options) { return slackFunction('channels.setTopic', options) };
-endpoint.channels.unarchive = function (options) { return slackFunction('channels.unarchive', options) };
-
 endpoint.chat = {};
 endpoint.chat.delete = function (options) { return slackFunction('chat.delete', options) };
 endpoint.chat.meMessage = function (options) { return slackFunction('chat.meMessage', options) };
@@ -99,14 +82,12 @@ endpoint.dnd.info = function (options) { return slackFunction('dnd.info', option
 endpoint.dnd.setSnooze = function (options) { return slackFunction('dnd.setSnooze', options) };
 endpoint.dnd.teamInfo = function (options) { return slackFunction('dnd.teamInfo', options) };
 
-endpoint.emoji = {};
-endpoint.emoji.list = function (options) { return slackFunction('emoji.list', options) };
+endpoint.admin.emoji = {};
+endpoint.admin.emoji.list = function (options) { return slackFunction('admin.emoji.list', options) };
 
 endpoint.files = {};
 endpoint.files.comments = {};
-endpoint.files.comments.add = function (options) { return slackFunction('files.comments.add', options) };
 endpoint.files.comments.delete = function (options) { return slackFunction('files.comments.delete', options) };
-endpoint.files.comments.edit = function (options) { return slackFunction('files.comments.edit', options) };
 endpoint.files.delete = function (options) { return slackFunction('files.delete', options) };
 endpoint.files.info = function (options) { return slackFunction('files.info', options) };
 endpoint.files.list = function (options) { return slackFunction('files.list', options) };
@@ -114,41 +95,6 @@ endpoint.files.revokePublicURL = function (options) { return slackFunction('file
 endpoint.files.sharedPublicURL = function (options) { return slackFunction('files.sharedPublicURL', options) };
 endpoint.files.upload = function (options) { return slackFunction('files.upload', options) };
 endpoint.files.download = function (options, callbackData, callbacks) { return downloadFile(options, callbackData, callbacks) };
-
-endpoint.groups = {};
-endpoint.groups.archive = function (options) { return slackFunction('groups.archive', options) };
-endpoint.groups.close = function (options) { return slackFunction('groups.close', options) };
-endpoint.groups.create = function (options) { return slackFunction('groups.create', options) };
-endpoint.groups.createChild = function (options) { return slackFunction('groups.createChild', options) };
-endpoint.groups.history = function (options) { return slackFunction('groups.history', options) };
-endpoint.groups.info = function (options) { return slackFunction('groups.info', options) };
-endpoint.groups.invite = function (options) { return slackFunction('groups.invite', options) };
-endpoint.groups.kick = function (options) { return slackFunction('groups.kick', options) };
-endpoint.groups.leave = function (options) { return slackFunction('groups.leave', options) };
-endpoint.groups.list = function (options) { return slackFunction('groups.list', options) };
-endpoint.groups.mark = function (options) { return slackFunction('groups.mark', options) };
-endpoint.groups.open = function (options) { return slackFunction('groups.open', options) };
-endpoint.groups.rename = function (options) { return slackFunction('groups.rename', options) };
-endpoint.groups.replies = function (options) { return slackFunction('groups.replies', options) };
-endpoint.groups.setPurpose = function (options) { return slackFunction('groups.setPurpose', options) };
-endpoint.groups.setTopic = function (options) { return slackFunction('groups.setTopic', options) };
-endpoint.groups.unarchive = function (options) { return slackFunction('groups.unarchive', options) };
-
-endpoint.im = {};
-endpoint.im.close = function (options) { return slackFunction('im.close', options) };
-endpoint.im.history = function (options) { return slackFunction('im.history', options) };
-endpoint.im.list = function (options) { return slackFunction('im.list', options) };
-endpoint.im.mark = function (options) { return slackFunction('im.mark', options) };
-endpoint.im.open = function (options) { return slackFunction('im.open', options) };
-endpoint.im.replies = function (options) { return slackFunction('im.replies', options) };
-
-endpoint.mpim = {};
-endpoint.mpim.close = function (options) { return slackFunction('mpim.close', options) };
-endpoint.mpim.history = function (options) { return slackFunction('mpim.history', options) };
-endpoint.mpim.list = function (options) { return slackFunction('mpim.list', options) };
-endpoint.mpim.mark = function (options) { return slackFunction('mpim.mark', options) };
-endpoint.mpim.open = function (options) { return slackFunction('mpim.open', options) };
-endpoint.mpim.replies = function (options) { return slackFunction('mpim.replies', options) };
 
 endpoint.oauth = {};
 endpoint.oauth.access = function (options) { return slackFunction('oauth.access', options) };
@@ -308,36 +254,6 @@ endpoint.authTest = {};
 
 endpoint.botsInfo = {};
 
-endpoint.channelsArchive = {};
-
-endpoint.channelsCreate = {};
-
-endpoint.channelsHistory = {};
-
-endpoint.channelsInfo = {};
-
-endpoint.channelsInvite = {};
-
-endpoint.channelsJoin = {};
-
-endpoint.channelsKick = {};
-
-endpoint.channelsLeave = {};
-
-endpoint.channelsList = {};
-
-endpoint.channelsMark = {};
-
-endpoint.channelsRename = {};
-
-endpoint.channelsReplies = {};
-
-endpoint.channelsSetPurpose = {};
-
-endpoint.channelsSetTopic = {};
-
-endpoint.channelsUnarchive = {};
-
 endpoint.chatDelete = {};
 
 endpoint.chatMeMessage = {};
@@ -402,13 +318,9 @@ endpoint.dndSetSnooze = {};
 
 endpoint.dndTeamInfo = {};
 
-endpoint.emojiList = {};
-
-endpoint.filesCommentsAdd = {};
+endpoint.adminEmojiList = {};
 
 endpoint.filesCommentsDelete = {};
-
-endpoint.filesCommentsEdit = {};
 
 endpoint.filesDelete = {};
 
@@ -421,64 +333,6 @@ endpoint.filesRevokePublicURL = {};
 endpoint.filesSharedPublicURL = {};
 
 endpoint.filesUpload = {};
-
-endpoint.groupsArchive = {};
-
-endpoint.groupsClose = {};
-
-endpoint.groupsCreate = {};
-
-endpoint.groupsCreateChild = {};
-
-endpoint.groupsHistory = {};
-
-endpoint.groupsInfo = {};
-
-endpoint.groupsInvite = {};
-
-endpoint.groupsKick = {};
-
-endpoint.groupsLeave = {};
-
-endpoint.groupsList = {};
-
-endpoint.groupsMark = {};
-
-endpoint.groupsOpen = {};
-
-endpoint.groupsRename = {};
-
-endpoint.groupsReplies = {};
-
-endpoint.groupsSetPurpose = {};
-
-endpoint.groupsSetTopic = {};
-
-endpoint.groupsUnarchive = {};
-
-endpoint.imClose = {};
-
-endpoint.imHistory = {};
-
-endpoint.imList = {};
-
-endpoint.imMark = {};
-
-endpoint.imOpen = {};
-
-endpoint.imReplies = {};
-
-endpoint.mpimClose = {};
-
-endpoint.mpimHistory = {};
-
-endpoint.mpimList = {};
-
-endpoint.mpimMark = {};
-
-endpoint.mpimOpen = {};
-
-endpoint.mpimReplies = {};
 
 endpoint.oauthAccess = {};
 
@@ -589,96 +443,6 @@ endpoint.authTest.post = function(httpOptions) {
 endpoint.botsInfo.get = function(httpOptions) {
     var url = 'bots.info';
     sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsArchive.post = function(httpOptions) {
-    var url = 'channels.archive';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsCreate.post = function(httpOptions) {
-    var url = 'channels.create';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsHistory.get = function(httpOptions) {
-    var url = 'channels.history';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsInfo.get = function(httpOptions) {
-    var url = 'channels.info';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsInvite.post = function(httpOptions) {
-    var url = 'channels.invite';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsJoin.post = function(httpOptions) {
-    var url = 'channels.join';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsKick.post = function(httpOptions) {
-    var url = 'channels.kick';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsLeave.post = function(httpOptions) {
-    var url = 'channels.leave';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsList.get = function(httpOptions) {
-    var url = 'channels.list';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsMark.post = function(httpOptions) {
-    var url = 'channels.mark';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsRename.post = function(httpOptions) {
-    var url = 'channels.rename';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsReplies.get = function(httpOptions) {
-    var url = 'channels.replies';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsSetPurpose.post = function(httpOptions) {
-    var url = 'channels.setPurpose';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsSetTopic.post = function(httpOptions) {
-    var url = 'channels.setTopic';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.channelsUnarchive.post = function(httpOptions) {
-    var url = 'channels.unarchive';
-    sys.logs.debug('[slack] POST from: ' + url);
     return slackFunction(url, httpOptions);
 };
 
@@ -874,26 +638,14 @@ endpoint.dndTeamInfo.get = function(httpOptions) {
     return slackFunction(url, httpOptions);
 };
 
-endpoint.emojiList.get = function(httpOptions) {
-    var url = 'emoji.list';
+endpoint.adminEmojiList.get = function(httpOptions) {
+    var url = 'admin.emoji.list';
     sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.filesCommentsAdd.post = function(httpOptions) {
-    var url = 'files.comments.add';
-    sys.logs.debug('[slack] POST from: ' + url);
     return slackFunction(url, httpOptions);
 };
 
 endpoint.filesCommentsDelete.post = function(httpOptions) {
     var url = 'files.comments.delete';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.filesCommentsEdit.post = function(httpOptions) {
-    var url = 'files.comments.edit';
     sys.logs.debug('[slack] POST from: ' + url);
     return slackFunction(url, httpOptions);
 };
@@ -931,180 +683,6 @@ endpoint.filesSharedPublicURL.post = function(httpOptions) {
 endpoint.filesUpload.post = function(httpOptions) {
     var url = 'files.upload';
     sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsArchive.post = function(httpOptions) {
-    var url = 'groups.archive';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsClose.post = function(httpOptions) {
-    var url = 'groups.close';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsCreate.post = function(httpOptions) {
-    var url = 'groups.create';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsCreateChild.post = function(httpOptions) {
-    var url = 'groups.createChild';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsHistory.get = function(httpOptions) {
-    var url = 'groups.history';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsInfo.get = function(httpOptions) {
-    var url = 'groups.info';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsInvite.post = function(httpOptions) {
-    var url = 'groups.invite';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsKick.post = function(httpOptions) {
-    var url = 'groups.kick';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsLeave.post = function(httpOptions) {
-    var url = 'groups.leave';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsList.get = function(httpOptions) {
-    var url = 'groups.list';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsMark.post = function(httpOptions) {
-    var url = 'groups.mark';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsOpen.post = function(httpOptions) {
-    var url = 'groups.open';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsRename.post = function(httpOptions) {
-    var url = 'groups.rename';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsReplies.get = function(httpOptions) {
-    var url = 'groups.replies';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsSetPurpose.post = function(httpOptions) {
-    var url = 'groups.setPurpose';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsSetTopic.post = function(httpOptions) {
-    var url = 'groups.setTopic';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.groupsUnarchive.post = function(httpOptions) {
-    var url = 'groups.unarchive';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imClose.post = function(httpOptions) {
-    var url = 'im.close';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imHistory.get = function(httpOptions) {
-    var url = 'im.history';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imList.get = function(httpOptions) {
-    var url = 'im.list';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imMark.post = function(httpOptions) {
-    var url = 'im.mark';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imOpen.post = function(httpOptions) {
-    var url = 'im.open';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.imReplies.get = function(httpOptions) {
-    var url = 'im.replies';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimClose.post = function(httpOptions) {
-    var url = 'mpim.close';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimHistory.get = function(httpOptions) {
-    var url = 'mpim.history';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimList.get = function(httpOptions) {
-    var url = 'mpim.list';
-    sys.logs.debug('[slack] GET from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimMark.post = function(httpOptions) {
-    var url = 'mpim.mark';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimOpen.post = function(httpOptions) {
-    var url = 'mpim.open';
-    sys.logs.debug('[slack] POST from: ' + url);
-    return slackFunction(url, httpOptions);
-};
-
-endpoint.mpimReplies.get = function(httpOptions) {
-    var url = 'mpim.replies';
-    sys.logs.debug('[slack] GET from: ' + url);
     return slackFunction(url, httpOptions);
 };
 

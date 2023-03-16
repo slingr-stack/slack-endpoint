@@ -20,18 +20,6 @@
             "label": "GET bots.info"
           },
           {
-            "label": "GET channels.history"
-          },
-          {
-            "label": "GET channels.info"
-          },
-          {
-            "label": "GET channels.list"
-          },
-          {
-            "label": "GET channels.replies"
-          },
-          {
             "label": "GET conversations.history"
           },
           {
@@ -56,43 +44,13 @@
             "label": "GET dnd.teamInfo"
           },
           {
-            "label": "GET emoji.list"
+            "label": "GET admin.emoji.list"
           },
           {
             "label": "GET files.info"
           },
           {
             "label": "GET files.list"
-          },
-          {
-            "label": "GET groups.history"
-          },
-          {
-            "label": "GET groups.info"
-          },
-          {
-            "label": "GET groups.list"
-          },
-          {
-            "label": "GET groups.replies"
-          },
-          {
-            "label": "GET im.history"
-          },
-          {
-            "label": "GET im.list"
-          },
-          {
-            "label": "GET im.replies"
-          },
-          {
-            "label": "GET mpim.history"
-          },
-          {
-            "label": "GET mpim.list"
-          },
-          {
-            "label": "GET mpim.replies"
           },
           {
             "label": "GET pins.list"
@@ -176,39 +134,6 @@
             "label": "POST auth.test"
           },
           {
-            "label": "POST channels.archive"
-          },
-          {
-            "label": "POST channels.create"
-          },
-          {
-            "label": "POST channels.invite"
-          },
-          {
-            "label": "POST channels.join"
-          },
-          {
-            "label": "POST channels.kick"
-          },
-          {
-            "label": "POST channels.leave"
-          },
-          {
-            "label": "POST channels.mark"
-          },
-          {
-            "label": "POST channels.rename"
-          },
-          {
-            "label": "POST channels.setPurpose"
-          },
-          {
-            "label": "POST channels.setTopic"
-          },
-          {
-            "label": "POST channels.unarchive"
-          },
-          {
             "label": "POST chat.delete"
           },
           {
@@ -281,13 +206,7 @@
             "label": "POST dnd.endSnooze"
           },
           {
-            "label": "POST files.comments.add"
-          },
-          {
             "label": "POST files.comments.delete"
-          },
-          {
-            "label": "POST files.comments.edit"
           },
           {
             "label": "POST files.delete"
@@ -300,63 +219,6 @@
           },
           {
             "label": "POST files.upload"
-          },
-          {
-            "label": "POST groups.archive"
-          },
-          {
-            "label": "POST groups.close"
-          },
-          {
-            "label": "POST groups.create"
-          },
-          {
-            "label": "POST groups.createChild"
-          },
-          {
-            "label": "POST groups.invite"
-          },
-          {
-            "label": "POST groups.kick"
-          },
-          {
-            "label": "POST groups.leave"
-          },
-          {
-            "label": "POST groups.mark"
-          },
-          {
-            "label": "POST groups.open"
-          },
-          {
-            "label": "POST groups.rename"
-          },
-          {
-            "label": "POST groups.setPurpose"
-          },
-          {
-            "label": "POST groups.setTopic"
-          },
-          {
-            "label": "POST groups.unarchive"
-          },
-          {
-            "label": "POST im.close"
-          },
-          {
-            "label": "POST im.mark"
-          },
-          {
-            "label": "POST im.open"
-          },
-          {
-            "label": "POST mpim.close"
-          },
-          {
-            "label": "POST mpim.mark"
-          },
-          {
-            "label": "POST mpim.open"
           },
           {
             "label": "POST oauth.access"
