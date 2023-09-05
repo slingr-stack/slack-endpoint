@@ -82,6 +82,7 @@ endpoint.dnd.info = function (options) { return slackFunction('dnd.info', option
 endpoint.dnd.setSnooze = function (options) { return slackFunction('dnd.setSnooze', options) };
 endpoint.dnd.teamInfo = function (options) { return slackFunction('dnd.teamInfo', options) };
 
+endpoint.admin = {};
 endpoint.admin.emoji = {};
 endpoint.admin.emoji.list = function (options) { return slackFunction('admin.emoji.list', options) };
 
